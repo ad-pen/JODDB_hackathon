@@ -1,0 +1,121 @@
+// --- Variables ---
+$primary-color: #a98b4f;
+$dark-text: #333333;
+$card-bg: #4a4a4a; // Dark gray from your image
+$light-text: #ffffff;
+$highlight-purple: #9b59b6; // A purple for the highlight
+
+// --- Main Page Container ---
+.submitted-tasks-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+  // A simple animation for the page loading
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// --- Title & Divider ---
+.submitted-title {
+  color: $primary-color;
+  font-weight: bold;
+  font-size: 2.2rem;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.title-divider {
+  border: 0;
+  height: 2px;
+  background-color: $dark-text;
+  margin-bottom: 3rem;
+}
+
+// --- Grid Layout ---
+.tasks-grid {
+  display: grid;
+  // Creates two equal-width columns
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.5rem;
+
+  // On smaller screens, stack to a single column
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// --- Task Card Styling ---
+.task-card {
+  background-color: $card-bg;
+  color: $light-text;
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  min-height: 160px; // Ensures cards have a consistent height
+  
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; // Aligns details to the top
+
+  border: 3px solid transparent; // Placeholder for highlight border
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+
+  // The purple border from your image
+  &:hover,
+  &:focus {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    border-color: $highlight-purple;
+    outline: none;
+    cursor: pointer;
+  }
+}
+
+.task-details {
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
+
+    // Adds the bullet point before each item
+    &::before {
+      content: '•';
+      color: $light-text;
+      font-weight: bold;
+      display: inline-block;
+      width: 1em;
+      margin-left: -1em;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.task-status {
+  font-size: 0.9rem;
+  font-weight: bold;
+  align-self: flex-end; // Pushes this item to the bottom-right
+}
+
+.status-pending {
+  color: $primary-color; // The gold "PENDING" text
+  margin-left: 0.5rem;
+}

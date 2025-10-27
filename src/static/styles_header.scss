@@ -2,11 +2,23 @@ $primary-color: #a98b4f;
 $secondary-color: #d1d1d1;
 $dark-text: #333333;
 $light-text: #ffffff;
-$bg-light-gray: #b4b4b4;
+$bg-light-gray: #e0e0e0; // Changed to a lighter gray for the header
 $bg-white: #ffffff;
-$timer-text: #a98b4f; // Digital green
+$timer-text: #a98b4f;
 $input-bg: #f0f0f0;
 $input-border: #707070;
+
+// --- NEW: Keyframe animation for the header ---
+@keyframes fallIn {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
 
 // --- Header ---
 .header {
@@ -14,41 +26,122 @@ $input-border: #707070;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: $bg-light-gray;
+  background-color: $dark-text; // Lighter gray background
   border-bottom: 1px solid #ddd;
+  height: 115px; // Set a fixed height for the header
+
+  // --- NEW: Animation applied here ---
+  animation: fallIn 0.8s ease-out forwards;
+  // ----------------------------------
 
   .logo-container {
-    .logo-placeholder {
-      font-weight: bold;
-      color: $primary-color;
-    }
+    // No specific styles needed here, the img class handles it
   }
+
+  // --- NEW: Logo styling ---
+  .logo {
+    height: 100px; // Set a fixed height that fits the header
+    width: auto; // Maintain aspect ratio
+    margin: 0;
+    padding: 0;
+    display: block;
+  }
+  // -------------------------
 
   .user-container {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-    color: $light-text;
+    gap: 1.5rem; // This is the gap BETWEEN the .user-profile, .language-toggle, and .menu-icon
+    color: $bg-white; // Changed to dark text for the user info
+    margin-right: 70px;
 
-    .user-icon, .menu-icon {
-      font-size: 1.5rem;
-      // In a real app, these would be icons
+    // --- THIS IS THE CORRECTED PART ---
+    // .user-profile is a direct child of .user-container
+    .user-profile {
+      display: flex; // This makes the icon and name display in a row
+      align-items: center;
+      gap: 0.75rem; // This is the new, smaller gap. Set to 0 for no space.
+    }
+    // ---------------------------------
+
+    .user-icon {
+      // Style the container for the user icon
+      width: 70px; // Fixed width
+      height: 70px; // Fixed height
+      border-radius: 50%; // Make it circular
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      // If you're using an actual image inside, style that image:
+      img {
+        width: 100%; // Make the image fill the circular container
+        height: 100%;
+        object-fit: cover; // Cover the circle
+        border-radius: 50%;
+      }
+    }
+
+    .username {
+      font-size: 1.3rem; // Slightly smaller
+      font-weight: 500;
+      color: $bg-white; // Dark text
     }
     
     .language-toggle {
       cursor: pointer;
       font-weight: bold;
+      font-size: 1.3rem; // Slightly smaller
+      color: $bg-white; // Dark text
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: darken($bg-white, 10%);
+      }
     }
-  }
-  .logo {
-    // Set a fixed height for your logo
-    height: 75px;
-    
-    // Width will adjust automatically to keep the aspect ratio
-    width: auto; 
-    margin: 0;
-    padding: 0;
-    // Good practice for images to prevent extra bottom space
-    display: block; 
+
+    .menu-icon {
+      // Style the menu icon to look like a hamburger
+      width: 40px;
+      height: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+
+      &::before, &::after {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 3px;
+        background-color: $bg-white;
+        border-radius: 2px;
+      }
+      // Middle bar
+      &::before {
+        align-self: flex-start;
+      }
+      &::after {
+        align-self: flex-end;
+      }
+      // Add a third bar for the middle
+      &::after {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 3px;
+        background-color: $bg-white;
+        border-radius: 2px;
+        margin-top: 4px; // Space between bars
+      }
+      // The original plan for a single bar
+      &::before {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 3px;
+        background-color: $bg-white;
+        border-radius: 2px;
+      }
+    }
   }
 }
