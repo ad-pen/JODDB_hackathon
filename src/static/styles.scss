@@ -1,0 +1,128 @@
+// Variables
+$primary-color: #c9a961;
+$primary-hover: #b89850;
+$bg-dark: #707070;
+$bg-card: #a8a8a8;
+$text-white: #ffffff;
+$text-dark: #333333;
+$border-radius: 2.5rem;
+$transition: all 0.3s ease;
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $bg-dark;
+  padding: 1rem;
+}
+
+.login-card {
+  background-color: $bg-card;
+  border-radius: $border-radius;
+  padding: 3rem;
+  width: 100%;
+  max-width: 28rem;
+  
+  @media (max-width: 640px) {
+    padding: 2rem;
+  }
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  img {
+    max-width: 300px;
+    height: auto;
+  }
+}
+
+// Login Title
+.login-title {
+  color: $text-white;
+  font-size: 2.5rem; font-weight: 500;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+// Login Subtitle
+.login-subtitle {
+  color: $text-white; // Changed from $text-white
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 0.875rem;
+}
+
+// Form
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-label {
+  color: $text-white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.1em;
+  width: 85%;
+}
+
+.form-input {
+  width: 80%;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: none;
+  background-color: $text-white;
+  color: $text-dark;
+  font-size: 1rem;
+  transition: $transition;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px $primary-color;
+  }
+
+  &::placeholder {
+    color: #999999;
+  }
+}
+
+// Login Button
+.login-button {
+  // Removed width: 100% to make it fit content
+  display: block;
+  margin: 0 auto; // Center the button
+  background-color: $primary-color;
+  color: $text-white; // Changed from $text-white
+  font-weight: 600;
+  padding: 0.75rem 2.5rem; // Adjusted padding
+  border-radius: 0.5rem; // Slightly more rounded
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: $transition;
+  text-transform: capitalize; // Match "login" casing
+
+  &:hover {
+    background-color: $primary-hover;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($primary-color, 0.3);
+  }
+}
