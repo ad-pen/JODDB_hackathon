@@ -1,0 +1,213 @@
+// --- Variables ---
+$primary-color: #a98b4f;
+$secondary-color: #d1d1d1;
+$dark-text: #333333;
+$light-text: #ffffff;
+$bg-light-gray: #b4b4b4;
+$bg-white: #ffffff;
+$timer-text: #a98b4f; // Digital green
+$input-bg: #f0f0f0;
+$input-border: #707070;
+
+@font-face {
+  font-family: 'digital-7';
+  // 1. Use an absolute path (starts with /) from the 'public' folder
+  src: url('/assets/fonts/digital-7/digital-7.ttf') format('truetype'); // 2. Corrected format
+  font-weight: normal;
+  font-style: normal;
+}
+
+// --- Base Styles ---
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: $bg-white;
+  font-family: sans-serif;
+}
+
+.main-content {
+  flex-grow: 1;
+  width: 100%;
+  max-width: 1400px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+}
+
+.section-title {
+  color: $primary-color;
+  font-weight: bold;
+  font-size: 1.75rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  letter-spacing: 1px;
+}
+
+// --- Button Styles ---
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  text-transform: uppercase;
+  min-width: 150px;
+  text-align: center;
+  
+  &.btn-primary {
+    background-color: $primary-color;
+    color: $light-text;
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+  
+  &.btn-secondary {
+    background-color: $secondary-color;
+    color: $dark-text;
+    &:hover {
+      background-color: darken($secondary-color, 10%);
+    }
+  }
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+// --- Header ---
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: $bg-light-gray;
+  border-bottom: 1px solid #ddd;
+
+  .logo-container {
+    .logo-placeholder {
+      font-weight: bold;
+      color: $primary-color;
+    }
+  }
+
+  .user-container {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    color: $dark-text;
+
+    .user-icon, .menu-icon {
+      font-size: 1.5rem;
+      // In a real app, these would be icons
+    }
+    
+    .language-toggle {
+      cursor: pointer;
+      font-weight: bold;
+    }
+  }
+  .logo {
+    // Set a fixed height for your logo
+    height: 75px;
+    
+    // Width will adjust automatically to keep the aspect ratio
+    width: auto; 
+    margin: 0;
+    padding: 0;
+    // Good practice for images to prevent extra bottom space
+    display: block; 
+  }
+}
+
+// --- Main 3-Column Layout ---
+.task-view-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 3rem;
+  
+  // Each column takes up 30% of the space to maintain the layout
+  & > div {
+    flex-basis: 30%;
+    min-height: 400px; // Ensures columns stay aligned
+  }
+}
+
+// Left Column
+.task-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+
+  .task-icon-placeholder {
+    width: 150px;
+    height: 150px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    display: grid;
+    place-items: center;
+    color: #999;
+    font-size: 0.9rem;
+  }
+}
+
+// Middle Column
+.task-details-section {
+  .task-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  // NEW: Style for the read-only data fields
+  .data-field {
+    display: flex;
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid $input-border;
+    background-color: $input-bg;
+    font-size: 0.9rem;
+    color: $dark-text;
+    
+    // This creates the gray box on the right
+    &::after {
+      content: '';
+      display: block;
+      flex-basis: 50px;
+      flex-shrink: 0;
+      margin-left: auto;
+      background-color: #707070;
+      border-left: 1px solid $input-border;
+    }
+
+    span {
+      flex-grow: 1;
+    }
+  }
+
+  .button-group {
+    margin-top: 1rem;
+  }
+}
+
+// Right Column
+.task-timer-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  .timer-display {
+    color: $timer-text;
+    font-family: 'digital-7', Courier, monospace;
+    font-size: 3.5rem;
+    font-weight: bold;
+    padding: 1.5rem 2.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    letter-spacing: 4px;
+  }
+}

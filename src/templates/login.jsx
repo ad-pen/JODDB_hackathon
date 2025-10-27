@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../static/styles.scss';
+import '../static/styles_login.scss';
 import Logo from '../assets/cover_login.png';
 const LoginPage = () => {
   const [email, setEmail] = useState('');
