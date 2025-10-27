@@ -1,0 +1,54 @@
+$primary-color: #a98b4f;
+$secondary-color: #d1d1d1;
+$dark-text: #333333;
+$light-text: #ffffff;
+$bg-light-gray: #b4b4b4;
+$bg-white: #ffffff;
+$timer-text: #a98b4f; // Digital green
+$input-bg: #f0f0f0;
+$input-border: #707070;
+
+// --- Header ---
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: $bg-light-gray;
+  border-bottom: 1px solid #ddd;
+
+  .logo-container {
+    .logo-placeholder {
+      font-weight: bold;
+      color: $primary-color;
+    }
+  }
+
+  .user-container {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    color: $light-text;
+
+    .user-icon, .menu-icon {
+      font-size: 1.5rem;
+      // In a real app, these would be icons
+    }
+    
+    .language-toggle {
+      cursor: pointer;
+      font-weight: bold;
+    }
+  }
+  .logo {
+    // Set a fixed height for your logo
+    height: 75px;
+    
+    // Width will adjust automatically to keep the aspect ratio
+    width: auto; 
+    margin: 0;
+    padding: 0;
+    // Good practice for images to prevent extra bottom space
+    display: block; 
+  }
+}
