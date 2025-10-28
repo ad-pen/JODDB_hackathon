@@ -72,11 +72,41 @@ class JobOrder(models.Model):
     order_number = models.CharField(max_length=100, unique=True)
     number_devices = models.PositiveIntegerField()
     number_of_finished_devices = models.PositiveIntegerField(default=0)
-    devices = models.JSONField(default=list)  # list of {"serial_number": str, "status": str}
+    devices = models.JSONField(default=list)  # list of {"serial_number": str, "finished": bool}
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Job Order {self.order_number}"
     
+
+    def _normalize_devices(self):
+        """
+        Ensure devices is a list of dicts with 'serial_number' and 'status' keys,
+        and update counts accordingly.
+        """
+
+        raw = self.devices or []
+        if not isinstance(raw, list):
+            raw = []
+        normalized = []
+        for item in raw:
+            if not isinstance(item, dict):
+                continue
+            serial_number = str(item.get('serial_number', '')).strip()
+            if not serial_number:
+                continue
+            finished = bool(item.get('finished', False))
+            normalized.append({
+                'serial_number': serial_number,
+                'finished': finished
+            })
+        self.devices = normalized
+        self.number_devices = len(normalized)
+        self.number_of_finished_devices = sum(1 for d in normalized if d['finished'])
+
+    def save(self, *args, **kwargs):
+        self._normalize_devices()
+        super().save(*args, **kwargs)
+
     

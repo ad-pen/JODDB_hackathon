@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // 1. Import Link from react-router-dom
 import { Link } from 'react-router-dom';
 import Logo from '../assets/cover_login.png';
@@ -6,6 +6,7 @@ import '../static/styles_header.scss'
 import Eng from '../assets/eng.png';
 import Bell from '../assets/bell.svg';
 import Menu from '../assets/menu.png';
+import { use } from 'react';
 
 /**
  * The Dropdown Menu component.
@@ -18,7 +19,28 @@ import Menu from '../assets/menu.png';
 const Header = () => {
   // State to manage if the dropdown is open or closed
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const [username, setUsername] = useState(() => {
+    try {
+      const u = JSON.parse(localStorage.getItem('user'));
+      return u?.username || u?.email || 'Username';
+    } catch {
+      return 'Username';
+    }
+  });
+  useEffect(() => {
+    const onStorage = (e) => {
+    if (e.key === 'user') {
+      try {
+        const u = JSON.parse(e.newValue);
+        setUsername(u?.username || u?.email || 'Username');
+      } catch {
+        setUsername('Username');
+      }
+    }
+  };
+  window.addEventListener('storage', onStorage);
+  return () => window.removeEventListener('storage', onStorage);
+}, []);
   // Function to toggle the menu state
   const toggleMenu = () => {
     if (isMenuOpen == false)
@@ -40,7 +62,7 @@ const Header = () => {
         {/* --- User Profile Group --- */}
         <div className="user-profile">
           <div className="user-icon"><img src={Eng} alt="User Avatar" /></div>
-          <span className="username">Username</span>
+          <span className="username">{username}</span>
         </div>
         {/* --------------------------- */}
 

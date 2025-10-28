@@ -5,12 +5,50 @@ import Logo from '../assets/cover_login.png';
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
+    setError('');
+    setLoading(true);
+    try {
+      const res = await fetch('http://localhost:8000/api/auth/login/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'Login failed');
+        setLoading(false);
+        return;
+      }
+      if (data.success) {
+        localStorage.setItem(
+          'user',
+          JSON.stringify({
+            email,
+            role: data.role,
+            username: data.username || (email ? email.split('@')[0] : 'Username'),
+          })
+        );
+        if (data.role === 'technician') navigate('/start-task');
+        else if (data.role === 'supervisor') navigate('/submitted-tasks');
+        else if (data.role === 'planner' || data.role === 'Planner') navigate('/admin');
+        else setError('Unknown user role');
+      } else {
+        setError('Invalid email or password');
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
     console.log('Login submitted', { email, password });
-    navigate('/start-task');
   };
 
   return (
@@ -50,8 +88,10 @@ const LoginPage = () => {
             />
           </div>
 
-          <button type="submit" className="login-button">
-            login
+          {error && <div className="form-error">{error}</div>}
+
+          <button type="submit" className="login-button" disabled={loading}>
+            {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
       </div>
