@@ -52,7 +52,6 @@ const StartTask = () => {
 
   return (
     <div className="page-container">
-      <Header />
       <main className="main-content">
         <div className="task-view-container">
 

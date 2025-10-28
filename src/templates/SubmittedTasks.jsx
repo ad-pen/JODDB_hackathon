@@ -75,7 +75,6 @@ const TaskCard = ({ task }) => {
 const SubmittedTasks = () => {
   return (
    <> 
-    <Header />
     <main className="submitted-tasks-container">
       <h1 className="submitted-title">SUBMITTED TASKS</h1>
       <hr className="title-divider" />

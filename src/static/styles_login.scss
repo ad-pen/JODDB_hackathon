@@ -8,13 +8,17 @@ $text-dark: #333333;
 $border-radius: 2.5rem;
 $transition: all 0.3s ease;
 
+body {
+  padding: 0;
+  margin: 0;
+}
+
 .login-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: $bg-dark;
-  padding: 1rem;
 }
 
 .login-card {

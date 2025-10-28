@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+// 1. Import Link from react-router-dom
+import { Link } from 'react-router-dom';
 import Logo from '../assets/cover_login.png';
 import '../static/styles_header.scss'
 import Eng from '../assets/eng.png';
@@ -7,15 +9,8 @@ import Menu from '../assets/menu.png';
 
 /**
  * The Dropdown Menu component.
- * It's rendered by the Header.
+ * Now uses <Link> tags for navigation.
  */
-const DropdownMenu = () => (
-  <nav className="dropdown-menu">
-    <a href="#" className="dropdown-item">Submitted Tasks</a>
-    <a href="#" className="dropdown-item">Tasks</a>
-    <a href="#" className="dropdown-item">Logout</a>
-  </nav>
-);
 
 /**
  * The main Header component.
@@ -26,15 +21,20 @@ const Header = () => {
 
   // Function to toggle the menu state
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+    if (isMenuOpen == false)
+      setIsMenuOpen(true);
+    else
+      setIsMenuOpen(false);
   };
 
   return (
     // We add position: relative here so the absolute dropdown is positioned correctly
     <header className="header">
-      <div className="logo-container">
+      {/* 4. Made the logo a link to the main "start-task" page */}
+      <Link to="/start-task" className="logo-container">
         <span className="logo-placeholder"><img src={Logo} className='logo'/></span>
-      </div>
+      </Link>
+      
       <div className="user-container">
         
         {/* --- User Profile Group --- */}
@@ -61,7 +61,13 @@ const Header = () => {
         We add/remove the 'is-open' class to trigger the animation.
       */}
       <div className={`dropdown-container ${isMenuOpen ? 'is-open' : ''}`}>
-        <DropdownMenu />
+          <nav className="dropdown-menu">
+          {/* 2. Changed <a> to <Link> and href to to="" */}
+          <Link to="/submitted-tasks" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>Submitted Tasks</Link>
+          <Link to="/start-task" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>Tasks</Link>
+          {/* 3. Logout link now points to the login page (path="/") */}
+          <Link to="/" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>Logout</Link>
+        </nav>
       </div>
 
     </header>
