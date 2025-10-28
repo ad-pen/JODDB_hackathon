@@ -13,11 +13,9 @@ $bg-white: #ffffff; // Added for white border
 .admin-tasks-container {
   display: flex;
   width: 100%;
-  max-width: 1600px;
   margin: 2rem auto;
   padding: 0 2rem;
   gap: 3rem;
-  
   // Stacks on smaller screens
   @media (max-width: 1024px) {
     flex-direction: column;
@@ -50,10 +48,10 @@ $bg-white: #ffffff; // Added for white border
     }
   }
   #employee{
-    width: 240px;
+    width: 300px;
   }
   #date {
-    width: 240px;
+    width: 300px;
   }
   // --- FIX 1: Custom Dropdown ---
   .custom-select {
@@ -100,7 +98,7 @@ $bg-white: #ffffff; // Added for white border
   }
 
   .btn-primary {
-    padding: 0.75rem 1.5rem;
+    padding: 0.75rem 0.6rem;
     border: none;
     cursor: pointer;
     font-weight: bold;
@@ -112,7 +110,7 @@ $bg-white: #ffffff; // Added for white border
     
     // --- THIS IS THE FIX ---
     width: 200px; // Set to a fixed width
-    align-self: flex-end; // Align to the right
+    align-self: flex-start; // Align to the right
     // -----------------------
     
     margin-top: 1rem;
@@ -135,7 +133,7 @@ $bg-white: #ffffff; // Added for white border
     display: grid;
     grid-template-columns: auto 1fr 1fr 1fr; // Task#, 3 equal fields
     align-items: stretch; // Makes all fields same height
-    
+    width: 100%;
     gap: 1rem;
     padding: 1rem;
     background-color: $input-bg;
