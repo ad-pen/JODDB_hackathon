@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import '../static/styles_task_starting.scss';
 import Person from '../assets/person_add_task.png';
-import Header from './header'; // optional header component
 
 const StartTask = () => {
-  // States: 'idle', 'pending'
+  // States
   const [taskState, setTaskState] = useState('idle');
-
-  // form state
   const [operation, setOperation] = useState('');
   const [serial, setSerial] = useState('');
   const [numDevices, setNumDevices] = useState('');
   const [hoursSpent, setHoursSpent] = useState('');
   const [note, setNote] = useState('');
+  const [isIssueChecked, setIsIssueChecked] = useState(false);
+  const [isDelayChecked, setIsDelayChecked] = useState(false);
 
   const handlers = {
     handleShowTask: () => setTaskState('pending'),
@@ -25,17 +24,11 @@ const StartTask = () => {
         numDevices: Number(numDevices),
         hoursSpent: Number(hoursSpent),
         note,
+        isIssueChecked,
+        isDelayChecked,
       };
       console.log('Submitting task confirmation:', payload);
-      // TODO: wire this up to an API or parent handler as needed
-
-      // reset form and return to idle
-      setOperation('');
-      setSerial('');
-      setNumDevices('');
-      setHoursSpent('');
-      setNote('');
-      setTaskState('idle');
+      setTaskState('idle'); // Reset form
     },
   };
 
@@ -63,15 +56,17 @@ const StartTask = () => {
                 <h2 className="section-title">TASK CONFIRMATION</h2>
 
                 <form className="confirmation-form" onSubmit={handlers.handleSubmit}>
+                  
+                  {/* --- UPDATED LABELS --- */}
                   <div className="labels-box">
                     <ul>
                       <li>OPERATION NAME:</li>
                       <li>SERIAL NUMBER OF DEVICE USED:</li>
-                      <li>NUMBER OF DEVICES:</li>
-                      <li>HOURS SPENT:</li>
+                      <li>ISSUE / DELAY:</li> {/* Added for checkboxes */}
                     </ul>
                   </div>
 
+                  {/* --- UPDATED INPUTS --- */}
                   <div className="inputs-box">
                     <div className="form-row">
                       <select
@@ -79,12 +74,9 @@ const StartTask = () => {
                         value={operation}
                         onChange={e => setOperation(e.target.value)}
                         required
-                        aria-label="Operation / IO name"
                       >
                         <option value="">Select operation</option>
                         <option value="IO-Alpha">IO-Alpha</option>
-                        <option value="IO-Beta">IO-Beta</option>
-                        <option value="IO-Gamma">IO-Gamma</option>
                       </select>
                     </div>
 
@@ -94,15 +86,33 @@ const StartTask = () => {
                         value={serial}
                         onChange={e => setSerial(e.target.value)}
                         required
-                        aria-label="Serial number"
                       >
                         <option value="">Select serial</option>
                         <option value="SN-1001">SN-1001</option>
-                        <option value="SN-1002">SN-1002</option>
-                        <option value="SN-1003">SN-1003</option>
                       </select>
                     </div>
 
+                    {/* --- Checkboxes moved to their own row --- */}
+                    <div className="form-row check-boxes">
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={isIssueChecked}
+                          onChange={() => setIsIssueChecked(!isIssueChecked)}
+                        />
+                        Issue
+                      </label>
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={isDelayChecked}
+                          onChange={() => setIsDelayChecked(!isDelayChecked)}
+                        />
+                        Delay
+                      </label>
+                    </div>
+
+                    {/* --- Num Devices and Hours Spent are now in one row --- */}
                     <div className="form-row small-inputs">
                       <div className="small-field">
                         <input
@@ -112,8 +122,7 @@ const StartTask = () => {
                           value={numDevices}
                           onChange={e => setNumDevices(e.target.value)}
                           required
-                          placeholder="0"
-                          aria-label="Number of devices"
+                          placeholder="Number of devices"
                         />
                       </div>
 
@@ -126,12 +135,12 @@ const StartTask = () => {
                           value={hoursSpent}
                           onChange={e => setHoursSpent(e.target.value)}
                           required
-                          placeholder="0.0"
-                          aria-label="Hours spent"
+                          placeholder="Hours spent"
                         />
                       </div>
                     </div>
 
+                    {/* --- Textarea is now its own row --- */}
                     <div className="form-row">
                       <textarea
                         id="note"
@@ -139,7 +148,6 @@ const StartTask = () => {
                         value={note}
                         onChange={e => setNote(e.target.value)}
                         placeholder="Add note"
-                        aria-label="Add note"
                       />
                     </div>
 
@@ -147,14 +155,10 @@ const StartTask = () => {
                       <button type="submit" className="btn btn-primary">SUBMIT</button>
                     </div>
                   </div>
-
                 </form>
               </>
             )}
           </div>
-
-          {/* Right column intentionally removed (timer / counter removed) */}
-
         </div>
       </main>
     </div>
