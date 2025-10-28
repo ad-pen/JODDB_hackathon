@@ -2,13 +2,13 @@ $primary-color: #a98b4f;
 $secondary-color: #d1d1d1;
 $dark-text: #333333;
 $light-text: #ffffff;
-$bg-light-gray: #e0e0e0; // Changed to a lighter gray for the header
+$bg-light-gray: #e0e0e0;
 $bg-white: #ffffff;
 $timer-text: #a98b4f;
 $input-bg: #f0f0f0;
 $input-border: #707070;
 
-// --- NEW: Keyframe animation for the header ---
+// --- Keyframe animation for the header ---
 @keyframes fallIn {
   from {
     transform: translateY(-100%);
@@ -26,122 +26,151 @@ $input-border: #707070;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: $dark-text; // Lighter gray background
+  background-color: $dark-text;
   border-bottom: 1px solid #ddd;
-  height: 115px; // Set a fixed height for the header
-
-  // --- NEW: Animation applied here ---
+  height: 115px;
   animation: fallIn 0.8s ease-out forwards;
-  // ----------------------------------
+  
+  // --- This is crucial for positioning the dropdown menu ---
+  position: relative;
+  // --------------------------------------------------------
 
   .logo-container {
     // No specific styles needed here, the img class handles it
   }
 
-  // --- NEW: Logo styling ---
   .logo {
-    height: 100px; // Set a fixed height that fits the header
-    width: auto; // Maintain aspect ratio
+    height: 100px;
+    width: auto;
     margin: 0;
     padding: 0;
     display: block;
   }
-  // -------------------------
 
   .user-container {
     display: flex;
     align-items: center;
-    gap: 1.5rem; // This is the gap BETWEEN the .user-profile, .language-toggle, and .menu-icon
-    color: $bg-white; // Changed to dark text for the user info
+    gap: 1.5rem;
+    color: $bg-white;
     margin-right: 70px;
 
-    // --- THIS IS THE CORRECTED PART ---
-    // .user-profile is a direct child of .user-container
     .user-profile {
-      display: flex; // This makes the icon and name display in a row
+      display: flex;
       align-items: center;
-      gap: 0.75rem; // This is the new, smaller gap. Set to 0 for no space.
+      gap: 0.75rem;
     }
-    // ---------------------------------
 
     .user-icon {
-      // Style the container for the user icon
-      width: 70px; // Fixed width
-      height: 70px; // Fixed height
-      border-radius: 50%; // Make it circular
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
-      // If you're using an actual image inside, style that image:
       img {
-        width: 100%; // Make the image fill the circular container
+        width: 100%;
         height: 100%;
-        object-fit: cover; // Cover the circle
+        object-fit: cover;
         border-radius: 50%;
       }
     }
 
     .username {
-      font-size: 1.3rem; // Slightly smaller
+      font-size: 1.3rem;
       font-weight: 500;
-      color: $bg-white; // Dark text
+      color: $bg-white;
     }
     
     .language-toggle {
       cursor: pointer;
       font-weight: bold;
-      font-size: 1.3rem; // Slightly smaller
-      color: $bg-white; // Dark text
+      font-size: 1.3rem;
+      color: $bg-white;
       transition: color 0.2s ease;
-
       &:hover {
         color: darken($bg-white, 10%);
       }
     }
 
+    // --- REVISED .menu-icon styles ---
+    // This now styles the containers for your <img> icons
+    // and removes the old ::before/::after code
     .menu-icon {
-      // Style the menu icon to look like a hamburger
-      width: 40px;
-      height: 30px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      background: none;
+      border: none;
+      padding: 0;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-      &::before, &::after {
-        content: '';
-        display: block;
-        width: 100%;
-        height: 3px;
-        background-color: $bg-white;
-        border-radius: 2px;
+      img {
+        height: 30px; // Standard height
+        width: auto;
+        transition: transform 0.2s ease, filter 0.2s ease;
       }
-      // Middle bar
-      &::before {
-        align-self: flex-start;
+      
+      .icon-bell {
+        height: 28px; // Bell is slightly smaller
       }
-      &::after {
-        align-self: flex-end;
+      .icon-menu {
+        height: 30px;
       }
-      // Add a third bar for the middle
-      &::after {
-        content: '';
-        display: block;
-        width: 100%;
-        height: 3px;
-        background-color: $bg-white;
-        border-radius: 2px;
-        margin-top: 4px; // Space between bars
+
+      &:hover img {
+        transform: scale(1.1);
+        filter: brightness(1.2);
       }
-      // The original plan for a single bar
-      &::before {
-        content: '';
-        display: block;
-        width: 100%;
-        height: 3px;
-        background-color: $bg-white;
-        border-radius: 2px;
-      }
+    }
+  }
+}
+
+// --- NEW: Dropdown Menu Styles ---
+
+.dropdown-container {
+  position: absolute;
+  top: 105px; // Just below the 115px header
+  right: 2rem; // Aligns with the header's right padding
+  z-index: 100;
+
+  // --- Animation: Initial State (Hidden) ---
+  opacity: 0;
+  transform: translateY(-10px) scale(0.95);
+  pointer-events: none; // Can't be clicked when hidden
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+
+  // --- Animation: Open State (Visible) ---
+  &.is-open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto; // Clickable when open
+  }
+}
+
+.dropdown-menu {
+  background-color: $dark-text; // Match header background
+  border: 1px solid #555; // Slightly lighter border
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 220px;
+  overflow: hidden; // Keeps the rounded corners
+  
+  .dropdown-item {
+    display: block;
+    padding: 0.75rem 1.25rem;
+    color: $light-text;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      background-color: $primary-color; // Gold hover
+      color: $dark-text; // Dark text on hover
+    }
+
+    // Separator lines
+    &:not(:last-child) {
+      border-bottom: 1px solid #555;
     }
   }
 }
