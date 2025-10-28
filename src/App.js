@@ -7,7 +7,7 @@ import Header from './templates/header';
 import LoginPage from './templates/login'; // Assuming you have this
 import StartTask from './templates/task_starting'; // Your main task page
 import SubmittedTasks from './templates/SubmittedTasks'; // Your submitted tasks page
-
+import AdminTasksPage from './templates/adminTaskspage';
 /**
  * This component wraps all pages that SHOULD have the header.
  * The <Outlet> component renders the active nested route (e.g., StartTask).
@@ -41,6 +41,7 @@ function App() {
       <Route element={<MainLayout />}>
         <Route path="/start-task" element={<StartTask />} />
         <Route path="/submitted-tasks" element={<SubmittedTasks />} />
+        <Route path='/admin' element={<AdminTasksPage />} />
         {/* You can add more routes here, e.g., for Notifications */}
         {/* <Route path="/notifications" element={<NotificationsPage />} /> */}
       </Route>
