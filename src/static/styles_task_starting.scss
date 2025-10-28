@@ -8,7 +8,7 @@ $input-bg: #f7f6f4;
 $input-border: #c0bfbf;
 $muted: #9b9b9b;
 
-// --- Keyframes (kept) ---
+// --- Keyframes ---
 @keyframes pulse-glow {
   0% { text-shadow: 0 0 5px rgba($primary-color, 0.15); }
   50% { text-shadow: 0 0 12px rgba($primary-color, 0.28); }
@@ -33,17 +33,15 @@ $muted: #9b9b9b;
   overflow: hidden;
 }
 
-/* main area left-aligned (not centered) */
 .main-content {
   flex-grow: 1;
   width: 100%;
   padding: 2.5rem 3.5rem;
   display: flex;
-  justify-content: flex-start; /* left align horizontally */
+  justify-content: flex-start;
   align-items: flex-start;
 }
 
-/* section title aligned left */
 .section-title {
   color: $primary-color;
   font-weight: 700;
@@ -53,7 +51,7 @@ $muted: #9b9b9b;
   letter-spacing: 0.8px;
 }
 
-/* Buttons */
+/* --- Buttons --- */
 .btn {
   padding: 0.6rem 1.0rem;
   border: none;
@@ -70,24 +68,18 @@ $muted: #9b9b9b;
     color: $light-text;
     &:hover { background-color: darken($primary-color, 6%); transform: translateY(-2px); }
   }
-  &.btn-secondary {
-    background-color: $secondary-color;
-    color: $dark-text;
-    &:hover { background-color: darken($secondary-color, 6%); transform: translateY(-2px); }
-  }
 }
 
-/* layout container */
+/* --- Layout Container --- */
 .task-view-container {
   display: flex;
-  align-items: flex-start; /* align top */
+  align-items: flex-start;
   gap: 2rem;
   width: 100%;
-  max-width: 1200px; /* content width constraint */
-  margin: 0; /* pinned to left inside main-content */
+  max-width: 1200px;
+  margin: 0;
 }
 
-/* left column with fixed width */
 .task-sidebar {
   width: 280px;
   flex: 0 0 280px;
@@ -111,7 +103,7 @@ $muted: #9b9b9b;
   object-fit: contain;
 }
 
-/* main task confirmation area: wider and left aligned */
+/* --- Task Confirmation Card --- */
 .task-details-section {
   flex: 1 1 auto;
   opacity: 0;
@@ -127,10 +119,8 @@ $muted: #9b9b9b;
     border-radius: 10px;
     box-shadow: 0 8px 25px rgba(0,0,0,0.06);
     box-sizing: border-box;
-
-    /* larger, rectangular confirmation card */
     min-height: 560px;
-    max-width: 880px; /* ensure a good reading line */
+    max-width: 880px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -138,48 +128,60 @@ $muted: #9b9b9b;
     gap: 0.75rem;
   }
 
-  /* grid: labels (left) + inputs (right) */
   .confirmation-form {
     display: grid;
     grid-template-columns: 36% 64%;
     gap: 1.4rem 2rem;
-    align-items: start;
+    align-items: start; // Aligns rows to the top
     width: 100%;
     margin-top: 0.25rem;
   }
 
-  /* labels column styling */
+  // --- FIX 4: Label Alignment ---
   .labels-box {
-    background: $input-bg;
-    border: 1px solid $input-border;
-    border-radius: 8px;
-    padding: 1.25rem;
-    min-height: 280px;
-    box-sizing: border-box;
-
-    ul { list-style: none; margin: 0; padding: 0; }
+    ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1rem; }
     li {
-      padding: 0.9rem 0;
+      padding: 0 1.15rem; // Use padding only for left/right
       font-weight: 700;
       color: $dark-text;
       font-size: 0.98rem;
-      border-bottom: 1px solid rgba($input-border, 0.12);
-      &:last-child { border-bottom: none; }
+      background: $input-bg;
+      border: 1px solid $input-border;
+      border-radius: 8px;
+      box-sizing: border-box;
+      
+      // --- Vertically center text ---
+      display: flex;
+      align-items: center; 
+      
+      // Match input heights
+      &:nth-child(1), // Operation
+      &:nth-child(2), // Serial
+      &:nth-child(3), // Checkboxes
+      &:nth-child(4) { // Small inputs
+        height: 52px;
+      }
+      
+      &:nth-child(5) { // Note
+        min-height: 180px;
+        align-items: flex-start; // Align label to top
+        padding-top: 1rem; // Add padding to match textarea
+      }
     }
   }
+  // -----------------------------
 
-  /* inputs column styling */
+  /* --- Inputs Column --- */
   .inputs-box {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1rem; // This now matches the labels gap
 
     .form-row {
       display: block;
       width: 100%;
     }
 
-    /* unified control sizes: tall, roomy inputs */
     select,
     input[type="number"],
     textarea {
@@ -194,10 +196,31 @@ $muted: #9b9b9b;
       transition: border-color 0.12s ease, box-shadow 0.12s ease;
     }
 
-    /* specific height values for neat vertical rhythm */
     select { height: 52px; }
     input[type="number"] { height: 52px; }
     textarea { min-height: 180px; padding-top: 0.9rem; resize: vertical; }
+
+    // --- FIX 1, 2, 3: Checkbox Row ---
+    .check-boxes {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      justify-content: flex-start; // Center the checkboxes
+      height: 52px; // Match input height
+      label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem; // Space between box and text
+        font-weight: 500;
+        cursor: pointer;
+      }
+      
+      input[type="checkbox"] {
+         width: 16px; // Custom size
+         height: 16px;
+      }
+    }
+    // ---------------------------------
 
     /* grouped smaller inputs side-by-side */
     .small-inputs {
@@ -210,7 +233,6 @@ $muted: #9b9b9b;
       input { height: 52px; }
     }
 
-    /* submit row — align left (do not center) */
     .submit-row {
       display: flex;
       justify-content: flex-start;
@@ -231,17 +253,52 @@ select:focus, input:focus, textarea:focus {
   box-shadow: 0 6px 18px rgba($primary-color, 0.06);
 }
 
-/* Responsive: stack the grid into a single column on smaller screens */
+/* Responsive */
 @media (max-width: 980px) {
   .main-content { padding: 1.25rem; }
   .task-view-container { flex-direction: column; gap: 1.25rem; max-width: 100%; }
   .task-sidebar { width: 100%; flex: 0 0 auto; }
-  .task-details-section .is-visible { min-height: auto; max-width: 100%; padding: 1.4rem; }
-  .task-details-section .confirmation-form { grid-template-columns: 1fr; }
-  .labels-box { order: 1; min-height: auto; }
-  .inputs-box { order: 2; }
-  .inputs-box textarea { min-height: 160px; }
-}
+  .task-details-section.is-visible { min-height: auto; max-width: 100%; padding: 1.4rem; }
+  
+  .task-details-section .confirmation-form { 
+    grid-template-columns: 1fr; // Stack labels on top of inputs
+  }
+  
+  .labels-box { 
+    order: 1; 
+    min-height: auto; 
+    ul { gap: 0.5rem; } // Tighter gap on mobile
+    
+    // --- Mobile label styles ---
+    li {
+      height: auto !important; // Remove fixed heights
+      min-height: auto !important;
+      padding: 0.5rem 0.75rem !important; // Smaller padding
+      align-items: center !important; // Keep centered
+      border: none; // Remove border
+      background: none; // Remove bg
+      padding-left: 0; // Remove padding
+      font-size: 0.9rem;
+    }
+  }
+  
+  .inputs-box { 
+    order: 2; 
+    gap: 0.75rem; // Tighter gap on mobile
+  }
 
-/* small accessibility tweak */
-button[disabled] { opacity: 0.6; cursor: not-allowed; } 
+  .inputs-box textarea { min-height: 120px; }
+  
+  // --- Mobile Checkbox Row ---
+  .check-boxes {
+    height: 48px;
+    padding: 0 1rem;
+    justify-content: flex-start; // Align left
+  }
+  
+  // --- Mobile Input Row ---
+  .small-inputs {
+    gap: 0.75rem;
+    select, input { height: 48px; }
+  }
+}
