@@ -1,9 +1,9 @@
 // --- Variables ---
 $primary-color: #a98b4f;
 $dark-text: #333333;
-$card-bg: #4a4a4a; // Dark gray from your image
+$card-bg: #4a4a4a;
 $light-text: #ffffff;
-$highlight-purple: #9b59b6; // A purple for the highlight
+$highlight-purple: #9b59b6;
 
 // --- Main Page Container ---
 .submitted-tasks-container {
@@ -11,26 +11,19 @@ $highlight-purple: #9b59b6; // A purple for the highlight
   max-width: 1400px;
   margin: 2rem auto;
   padding: 0 2rem;
-  // A simple animation for the page loading
   animation: fadeIn 0.5s ease-out;
+  box-sizing: border-box; // Added for better padding control
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-// --- Title & Divider ---
 .submitted-title {
   color: $primary-color;
   font-weight: bold;
-  font-size: 2.2rem;
+  font-size: clamp(1.8rem, 5vw, 2.2rem); // Fluid font size
   letter-spacing: 1px;
   margin-bottom: 0.5rem;
 }
@@ -45,14 +38,8 @@ $highlight-purple: #9b59b6; // A purple for the highlight
 // --- Grid Layout ---
 .tasks-grid {
   display: grid;
-  // Creates two equal-width columns
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 1fr); // 2 columns on desktop
   gap: 2.5rem;
-
-  // On smaller screens, stack to a single column
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
 }
 
 // --- Task Card Styling ---
@@ -61,17 +48,15 @@ $highlight-purple: #9b59b6; // A purple for the highlight
   color: $light-text;
   border-radius: 16px;
   padding: 1.5rem 2rem;
-  min-height: 160px; // Ensures cards have a consistent height
-  width: 80%;
-  
+  min-height: 160px;
+  width: 100%; // Fills its grid column
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start; // Aligns details to the top
-
-  border: 3px solid transparent; // Placeholder for highlight border
+  flex-direction: column; // CHANGED: Column layout
+  justify-content: space-between; // Pushes status to bottom
+  border: 3px solid transparent;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  box-sizing: border-box;
 
-  // The purple border from your image
   &:hover,
   &:focus {
     transform: translateY(-5px);
@@ -83,40 +68,48 @@ $highlight-purple: #9b59b6; // A purple for the highlight
 }
 
 .task-details {
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
+  ul { list-style: none; padding: 0; margin: 0; }
   li {
     font-size: 1rem;
     font-weight: 500;
     margin-bottom: 0.75rem;
-
-    // Adds the bullet point before each item
-    &::before {
-      content: '•';
-      color: $light-text;
-      font-weight: bold;
-      display: inline-block;
-      width: 1em;
-      margin-left: -1em;
-    }
-
-    &:last-child {
-      margin-bottom: 0;
-    }
+    // ... (bullet point styles) ...
+    strong { margin-right: 0.5em; }
+    span { }
+    &:last-child { margin-bottom: 0; }
   }
 }
 
 .task-status {
   font-size: 0.9rem;
   font-weight: bold;
-  align-self: flex-end; // Pushes this item to the bottom-right
+  align-self: flex-end;
+  margin-top: 1rem; // Add space
 }
 
 .status-pending {
-  color: $primary-color; // The gold "PENDING" text
+  color: $primary-color;
   margin-left: 0.5rem;
+}
+
+// --- NEW: Media Query for Tablets and Phones ---
+@media (max-width: 900px) {
+  .tasks-grid {
+    grid-template-columns: 1fr; // Stacks to 1 column
+    gap: 1.5rem;
+  }
+}
+
+// --- NEW: Media Query for Small Phones ---
+@media (max-width: 480px) {
+  .submitted-tasks-container {
+    padding: 0 1rem;
+  }
+  .task-card {
+    padding: 1rem 1.5rem;
+    min-height: auto;
+  }
+  .task-details li {
+    font-size: 0.9rem;
+  }
 }

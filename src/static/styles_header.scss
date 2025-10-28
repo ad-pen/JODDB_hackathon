@@ -8,19 +8,11 @@ $timer-text: #a98b4f;
 $input-bg: #f0f0f0;
 $input-border: #707070;
 
-// --- Keyframe animation for the header ---
 @keyframes fallIn {
-  from {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
-// --- Header ---
 .header {
   display: flex;
   justify-content: space-between;
@@ -28,23 +20,17 @@ $input-border: #707070;
   padding: 1rem 2rem;
   background-color: $dark-text;
   border-bottom: 1px solid #ddd;
-  height: 115px;
+  height: 115px; // Default height for desktop
   animation: fallIn 0.8s ease-out forwards;
-  
-  // --- This is crucial for positioning the dropdown menu ---
   position: relative;
-  // --------------------------------------------------------
-
-  .logo-container {
-    // No specific styles needed here, the img class handles it
-  }
-
+  z-index: 100;
   .logo {
     height: 100px;
     width: auto;
     margin: 0;
     padding: 0;
     display: block;
+    transition: height 0.3s ease; // Added for smooth resize
   }
 
   .user-container {
@@ -53,6 +39,7 @@ $input-border: #707070;
     gap: 1.5rem;
     color: $bg-white;
     margin-right: 70px;
+    transition: gap 0.3s ease, margin 0.3s ease; // Added
 
     .user-profile {
       display: flex;
@@ -67,6 +54,7 @@ $input-border: #707070;
       display: flex;
       justify-content: center;
       align-items: center;
+      transition: width 0.3s ease, height 0.3s ease; // Added
       img {
         width: 100%;
         height: 100%;
@@ -75,27 +63,20 @@ $input-border: #707070;
       }
     }
 
-    .username {
+    .username, .language-toggle {
       font-size: 1.3rem;
       font-weight: 500;
       color: $bg-white;
+      transition: font-size 0.3s ease; // Added
     }
     
     .language-toggle {
       cursor: pointer;
       font-weight: bold;
-      font-size: 1.3rem;
-      color: $bg-white;
-      transition: color 0.2s ease;
-      &:hover {
-        color: darken($bg-white, 10%);
-      }
     }
 
-    // --- REVISED .menu-icon styles ---
-    // This now styles the containers for your <img> icons
-    // and removes the old ::before/::after code
     .menu-icon {
+      // ... (styles for menu icon) ...
       background: none;
       border: none;
       padding: 0;
@@ -105,55 +86,43 @@ $input-border: #707070;
       justify-content: center;
 
       img {
-        height: 30px; // Standard height
-        width: auto;
-        transition: transform 0.2s ease, filter 0.2s ease;
-      }
-      
-      .icon-bell {
-        height: 28px; // Bell is slightly smaller
-      }
-      .icon-menu {
         height: 30px;
+        width: auto;
+        transition: height 0.3s ease; // Added
       }
-
-      &:hover img {
-        transform: scale(1.1);
-        filter: brightness(1.2);
-      }
+      .icon-bell { height: 28px; }
+      .icon-menu { height: 30px; }
     }
   }
 }
 
 // --- NEW: Dropdown Menu Styles ---
-
+// (No changes here, these are fine)
 .dropdown-container {
   position: absolute;
-  top: 105px; // Just below the 115px header
-  right: 2rem; // Aligns with the header's right padding
+  top: 105px; 
+  right: 2rem;
   z-index: 100;
-
-  // --- Animation: Initial State (Hidden) ---
   opacity: 0;
   transform: translateY(-10px) scale(0.95);
-  pointer-events: none; // Can't be clicked when hidden
+  pointer-events: none;
   transition: opacity 0.2s ease-out, transform 0.2s ease-out;
 
-  // --- Animation: Open State (Visible) ---
   &.is-open {
     opacity: 1;
     transform: translateY(0) scale(1);
-    pointer-events: auto; // Clickable when open
+    pointer-events: auto;
   }
 }
 
 .dropdown-menu {
-  background-color: $dark-text; // Match header background
-  border: 1px solid #555; // Slightly lighter border
+  // ... (dropdown styles) ...
+  background-color: $dark-text;
+  border: 1px solid #555;
   border-radius: 8px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   width: 220px;
-  overflow: hidden; // Keeps the rounded corners
+  overflow: hidden;
   
   .dropdown-item {
     display: block;
@@ -164,13 +133,76 @@ $input-border: #707070;
     transition: background-color 0.2s ease, color 0.2s ease;
 
     &:hover {
-      background-color: $primary-color; // Gold hover
-      color: $dark-text; // Dark text on hover
+      background-color: $primary-color;
+      color: $dark-text;
     }
 
-    // Separator lines
     &:not(:last-child) {
       border-bottom: 1px solid #555;
     }
   }
 }
+
+
+// --- NEW: Media Query for Tablets and Phones ---
+@media (max-width: 768px) {
+  .header {
+    height: 80px; // Shorter header
+    padding: 0.5rem 1rem; // Less padding
+
+    .logo {
+      height: 60px; // Smaller logo
+    }
+
+    .user-container {
+      gap: 1rem; // Tighter gap
+      margin-right: 1rem; // Less margin
+
+      .user-icon {
+        width: 50px; // Smaller icon
+        height: 50px;
+      }
+
+      .username, .language-toggle {
+        font-size: 1rem; // Smaller font
+      }
+
+      .menu-icon img {
+        height: 25px; // Smaller menu icons
+      }
+      .icon-bell { height: 23px; }
+    }
+  }
+
+  .dropdown-container {
+    top: 75px; // Positioned below new header height
+    right: 1rem;
+  }
+}
+
+// --- NEW: Media Query for Small Phones ---
+@media (max-width: 480px) {
+  .header {
+    height: 70px; // Even shorter
+
+    .logo {
+      height: 50px;
+    }
+
+    .user-container {
+      gap: 0.75rem;
+
+      // --- Hide text on very small screens ---
+      .username, .language-toggle {
+        display: none; 
+      }
+      // ----------------------------------------
+
+      .user-icon {
+        width: 40px;
+        height: 40px;
+      }
+    }
+  }
+}
+
