@@ -1,52 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import '../static/styles_task_starting.scss';
 import Person from '../assets/person_add_task.png';
-import Header from './header'; // Assuming you have this component
+import Header from './header'; // optional header component
 
-// --- Timer Component ---
-const TaskTimer = ({ taskState }) => {
-  const [time, setTime] = useState(0);
-
-  useEffect(() => {
-    let interval = null;
-    if (taskState === 'active') {
-      interval = setInterval(() => {
-        setTime(prevTime => prevTime + 1);
-      }, 1000);
-    } else {
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval);
-  }, [taskState]);
-
-  const formatTime = (seconds) => {
-    const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
-    const secs = (seconds % 60).toString().padStart(2, '0');
-    return `${mins}:${secs}`;
-  };
-
-  return (
-    <div className="timer-display">
-      {formatTime(time)}
-    </div>
-  );
-};
-
-
-// --- Main Page Component ---
 const StartTask = () => {
-  // States: 'idle', 'pending', 'active', 'paused'
+  // States: 'idle', 'pending'
   const [taskState, setTaskState] = useState('idle');
+
+  // form state
+  const [operation, setOperation] = useState('');
+  const [serial, setSerial] = useState('');
+  const [numDevices, setNumDevices] = useState('');
+  const [hoursSpent, setHoursSpent] = useState('');
+  const [note, setNote] = useState('');
 
   const handlers = {
     handleShowTask: () => setTaskState('pending'),
     handleChangeTask: () => console.log('Change Task Clicked (Not Implemented)'),
-    handleStartTask: () => setTaskState('active'),
-    handlePauseTask: () => setTaskState('paused'),
-    handleResumeTask: () => setTaskState('active'),
-    handleFinishTask: () => {
-      console.log('Task Finished. Transition to Page 3.');
-      setTaskState('idle'); 
+    handleSubmit: (e) => {
+      e.preventDefault();
+      const payload = {
+        operation,
+        serial,
+        numDevices: Number(numDevices),
+        hoursSpent: Number(hoursSpent),
+        note,
+      };
+      console.log('Submitting task confirmation:', payload);
+      // TODO: wire this up to an API or parent handler as needed
+
+      // reset form and return to idle
+      setOperation('');
+      setSerial('');
+      setNumDevices('');
+      setHoursSpent('');
+      setNote('');
+      setTaskState('idle');
     },
   };
 
@@ -55,7 +44,7 @@ const StartTask = () => {
       <main className="main-content">
         <div className="task-view-container">
 
-          {/* === Left Column (Always Visible) === */}
+          {/* Left Column (Always Visible) */}
           <div className="task-sidebar">
             <div className="left-column-container">
               <div className="task-icon-placeholder">
@@ -67,65 +56,104 @@ const StartTask = () => {
             </div>
           </div>
 
-          {/* === Middle Column (Task Details) === */}
+          {/* Middle Column (Task Confirmation Form) */}
           <div className={`task-details-section ${taskState !== 'idle' ? 'is-visible' : ''}`}>
             {(taskState !== 'idle') && (
               <>
-                <h2 className="section-title">TASK DETAILS</h2>
-                <div className="task-form">
-                  <div className="data-field">
-                    <span>PERFORMED TASK</span>
-                  </div>
-                  <div className="data-field">
-                    <span>SERIAL NUMBER</span>
-                  </div>
-                  <div className="data-field">
-                    <span>NUMBERS OF DEVICES</span>
+                <h2 className="section-title">TASK CONFIRMATION</h2>
+
+                <form className="confirmation-form" onSubmit={handlers.handleSubmit}>
+                  <div className="labels-box">
+                    <ul>
+                      <li>OPERATION NAME:</li>
+                      <li>SERIAL NUMBER OF DEVICE USED:</li>
+                      <li>NUMBER OF DEVICES:</li>
+                      <li>HOURS SPENT:</li>
+                    </ul>
                   </div>
 
-                  {/* This div is now ALWAYS rendered */}
-                  <div className="button-group">
-                    {/* The buttons inside are conditional */}
-                    {taskState === 'pending' && (
-                      <>
-                        <button type="button" className="btn btn-secondary" onClick={handlers.handleChangeTask}>
-                          CHANGE
-                        </button>
-                        <button type="button" className="btn btn-primary" onClick={handlers.handleStartTask}>
-                          START
-                        </button>
-                      </>
-                    )}
+                  <div className="inputs-box">
+                    <div className="form-row">
+                      <select
+                        id="operation"
+                        value={operation}
+                        onChange={e => setOperation(e.target.value)}
+                        required
+                        aria-label="Operation / IO name"
+                      >
+                        <option value="">Select operation</option>
+                        <option value="IO-Alpha">IO-Alpha</option>
+                        <option value="IO-Beta">IO-Beta</option>
+                        <option value="IO-Gamma">IO-Gamma</option>
+                      </select>
+                    </div>
+
+                    <div className="form-row">
+                      <select
+                        id="serial"
+                        value={serial}
+                        onChange={e => setSerial(e.target.value)}
+                        required
+                        aria-label="Serial number"
+                      >
+                        <option value="">Select serial</option>
+                        <option value="SN-1001">SN-1001</option>
+                        <option value="SN-1002">SN-1002</option>
+                        <option value="SN-1003">SN-1003</option>
+                      </select>
+                    </div>
+
+                    <div className="form-row small-inputs">
+                      <div className="small-field">
+                        <input
+                          id="numDevices"
+                          type="number"
+                          min="0"
+                          value={numDevices}
+                          onChange={e => setNumDevices(e.target.value)}
+                          required
+                          placeholder="0"
+                          aria-label="Number of devices"
+                        />
+                      </div>
+
+                      <div className="small-field">
+                        <input
+                          id="hoursSpent"
+                          type="number"
+                          min="0"
+                          step="0.1"
+                          value={hoursSpent}
+                          onChange={e => setHoursSpent(e.target.value)}
+                          required
+                          placeholder="0.0"
+                          aria-label="Hours spent"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="form-row">
+                      <textarea
+                        id="note"
+                        rows={4}
+                        value={note}
+                        onChange={e => setNote(e.target.value)}
+                        placeholder="Add note"
+                        aria-label="Add note"
+                      />
+                    </div>
+
+                    <div className="form-row submit-row">
+                      <button type="submit" className="btn btn-primary">SUBMIT</button>
+                    </div>
                   </div>
-                  
-                </div>
+
+                </form>
               </>
             )}
           </div>
 
-          {/* === Right Column (Task Timer) === */}
-          <div className={`task-timer-section ${taskState === 'active' || taskState === 'paused' ? 'is-visible' : ''}`}>
-            {(taskState === 'active' || taskState === 'paused') && (
-              <>
-                <h2 className="section-title">Task has started..</h2>
-                <TaskTimer taskState={taskState} />
-                <div className="button-group">
-                  {taskState === 'active' ? (
-                    <button type="button" className="btn btn-secondary" onClick={handlers.handlePauseTask}>
-                      PAUSE
-                    </button>
-                  ) : (
-                    <button type="button" className="btn btn-secondary" onClick={handlers.handleResumeTask}>
-                      RESUME
-                    </button>
-                  )}
-                  <button type="button" className="btn btn-primary" onClick={handlers.handleFinishTask}>
-                    FINISH
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
+          {/* Right column intentionally removed (timer / counter removed) */}
 
         </div>
       </main>
