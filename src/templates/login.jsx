@@ -37,7 +37,7 @@ const LoginPage = () => {
           })
         );
         if (data.role === 'technician') navigate('/start-task');
-        else if (data.role === 'supervisor') navigate('/submitted-tasks');
+        else if (data.role === 'supervisor') navigate('/admin');
         else if (data.role === 'planner' || data.role === 'Planner') navigate('/admin');
         else setError('Unknown user role');
       } else {
