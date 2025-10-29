@@ -1,11 +1,6 @@
 from django.urls import path
-from django.http import JsonResponse
-from .views import LoginView
-
-def health(request):
-    return JsonResponse({"status": "ok"})
+from . import views
 
 urlpatterns = [
-    path("health/", health, name="health"),
-    path("auth/login/", LoginView.as_view(), name="api-login"),
+    path('auth/login/', views.login_view, name='api-login'),
 ]

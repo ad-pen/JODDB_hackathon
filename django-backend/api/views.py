@@ -1,36 +1,52 @@
-from rest_framework.views import APIView
+from django.contrib.auth import authenticate, get_user_model
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import AllowAny
-from django.contrib.auth import authenticate
-from django.shortcuts import render
-from django.utils import timezone
-from datetime import timedelta
+from rest_framework.authtoken.models import Token
+import logging
 
-class LoginView(APIView):
-    authentication_classes = []
-    permission_classes = [AllowAny]
+logger = logging.getLogger(__name__)
+User = get_user_model()
 
-    def post(self, request):
-        email = request.data.get('email')
-        password = request.data.get('password')
-        if not email or not password:
-            return Response({"success": False, "error": "Email and password required"}, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def login_view(request):
+    payload = request.data if hasattr(request, 'data') else {}
+    username = (payload.get('username') or '').strip()
+    email = (payload.get('email') or '').strip()
+    password = payload.get('password')
 
-        user = authenticate(request, username=email, password=password)
-        if user is None:
-            return Response({"success": False, "error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+    logger.debug("login attempt fields present: username=%s email=%s password_provided=%s",
+                 bool(username), bool(email), bool(password))
 
-        # Enforce password expiry: 90 days (3 months)
-        last_changed = getattr(user, 'password_changed_at', None)
-        if not last_changed or (timezone.now() - last_changed > timedelta(days=90)):
-            # Inform user to contact administration (no redirect)
-            return Response({
-                "success": False,
-                "error": "password_expired",
-                "message": "Your password has expired. Please contact administration to reset your password."
-            }, status=status.HTTP_403_FORBIDDEN)
+    if not password or (not username and not email):
+        return Response({'detail': 'email/username and password required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        role = getattr(user, "role", None)
-        username = getattr(user, "username", None)
-        return Response({"success": True, "role": role, "username": username}, status=status.HTTP_200_OK)
+    # Resolve to the actual username value that authenticate expects
+    if not username and email:
+        try:
+            user_obj = User.objects.get(email__iexact=email)
+            # get the value used as username for this user model
+            username = getattr(user_obj, User.USERNAME_FIELD)
+            logger.debug("resolved email %s -> %s_field=%s", email, User.USERNAME_FIELD, username)
+        except User.DoesNotExist:
+            logger.debug("no user with email %s", email)
+            return Response({'detail': 'Invalid email or password'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Authenticate (Django's default authenticate expects 'username' kwarg)
+    user = authenticate(request, username=username, password=password)
+    if user is None:
+        logger.debug("authentication failed for username/email: %s / %s", username, email)
+        return Response({'detail': 'Invalid email or password'}, status=status.HTTP_400_BAD_REQUEST)
+
+    if not getattr(user, 'is_active', True):
+        logger.debug("inactive user attempted login: %s", username)
+        return Response({'detail': 'User account is disabled.'}, status=status.HTTP_403_FORBIDDEN)
+
+    token, _ = Token.objects.get_or_create(user=user)
+    role = getattr(user, 'role', None)
+    user_data = {'id': user.id, 'username': user.get_username(), 'role': role}
+
+    logger.info("login success user=%s id=%s role=%s", user.get_username(), user.id, role)
+    return Response({'token': token.key, 'user': user_data}, status=status.HTTP_200_OK)

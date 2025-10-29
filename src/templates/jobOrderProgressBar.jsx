@@ -5,6 +5,7 @@ import efficiencyIcon from '../assets/efficiency_icon.png';
 import utilizationIcon from '../assets/utilization_icon.png';
 import { useNavigate } from 'react-router-dom';
 import OrderDetailsModal from './OrderDetailsModal';
+import AllOrdersModal from './AllOrdersModal';
 import { allJobOrders } from './mockData'; // Import the new centralized data
 
 // --- NEW: We only want to show the first 5 orders on the main page ---
@@ -13,11 +14,11 @@ const sampleJobOrders = allJobOrders.slice(0, 5);
 const JobOrderProgressPage = () => {
   const navigate = useNavigate();
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [showAllOrders, setShowAllOrders] = useState(false);
 
-  // --- UPDATED: This button now navigates to the new page ---
+  // --- UPDATED: open modal instead of navigating ---
   const handleJobOrderProgressClick = () => {
-    console.log('Navigating to All Job Orders page...');
-    navigate('/all-orders'); // <-- This is the new route
+    setShowAllOrders(true);
   };
 
   const handleOrderClick = (order) => {
@@ -35,7 +36,7 @@ const JobOrderProgressPage = () => {
     }
   };
 
-  return (
+ return (
     <div className="page-container">
       <main className="main-content">
         <section className="job-order-section">
@@ -46,7 +47,6 @@ const JobOrderProgressPage = () => {
             JOB ORDER PROGRESS
           </button>
           <div className="progress-bars-container">
-            {/* --- UPDATED: Map over the new 'sampleJobOrders' array --- */}
             {sampleJobOrders.map((order) => {
               const percent = (order.actualOutput / order.requiredOutput) * 100;
               return (
@@ -97,6 +97,9 @@ const JobOrderProgressPage = () => {
         order={selectedOrder}
         onClose={() => setSelectedOrder(null)}
       />
+
+      {/* NEW: All orders modal */}
+      <AllOrdersModal open={showAllOrders} onClose={() => setShowAllOrders(false)} />
     </div>
   );
 };

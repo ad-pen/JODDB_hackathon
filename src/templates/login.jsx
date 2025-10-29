@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../static/styles_login.scss';
 import Logo from '../assets/cover_login.png';
+
+const API_URL = process.env.REACT_APP_API_URL || ''; // set REACT_APP_API_URL=http://localhost:8000 in .env or leave empty to use proxy
+
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -14,37 +17,41 @@ const LoginPage = () => {
     setError('');
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:8000/api/auth/login/', {
+      const res = await fetch(`${API_URL}/api/auth/login/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password }),
       });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error || 'Login failed');
+
+      // If server returned non-json (like HTML "Cannot POST"), read text and surface it
+      const ct = res.headers.get('content-type') || '';
+      let data;
+      if (ct.includes('application/json')) {
+        data = await res.json();
+      } else {
+        const text = await res.text();
+        throw new Error(text || 'Unexpected non-JSON response from server');
+      }
+
+      if (!res.ok || !data.token) {
+        setError(data.detail || 'Invalid email or password');
         setLoading(false);
         return;
       }
-      if (data.success) {
-        localStorage.setItem(
-          'user',
-          JSON.stringify({
-            email,
-            role: data.role,
-            username: data.username || (email ? email.split('@')[0] : 'Username'),
-          })
-        );
-        if (data.role === 'technician') navigate('/start-task');
-        else if (data.role === 'supervisor') navigate('/admin');
-        else if (data.role === 'planner' || data.role === 'Planner') navigate('dashboard');
-        else setError('Unknown user role');
-      } else {
-        setError('Invalid email or password');
-      }
+      localStorage.setItem(
+        'user',
+        JSON.stringify({ token: data.token, role: data.user?.role, username: data.user?.username })
+      );
+      const role = (data.user?.role || '').toLowerCase();
+      if (role === 'planner') navigate('/dashboard');
+      else if (role === 'supervisor') navigate('/admin');
+      else if (role === 'technician') navigate('/start-task');
+      else navigate('/'); // fallback
     } catch (err) {
-      setError('An error occurred. Please try again.');
+      // show the real error (e.g., HTML page text or CORS/network error)
+      setError(err.message || 'Network error');
     } finally {
       setLoading(false);
     }
