@@ -5,12 +5,13 @@ import Person from '../assets/person_add_task.png';
 const StartTask = () => {
   // States
   const [taskState, setTaskState] = useState('idle');
-  const [operation, setOperation] = useState('');
+  const [operationChoice, setOperationChoice] = useState(''); 
+  const [selectedOperations, setSelectedOperations] = useState([]);
+  const operationOptions = ['IO-Alpha', 'IO-Beta', 'IO-Gamma'];
   const [serial, setSerial] = useState('');
   const [numDevices, setNumDevices] = useState('');
-  // const [hoursSpent, setHoursSpent] = useState(''); // <-- Removed
-  const [startTime, setStartTime] = useState(''); // <-- Added
-  const [endTime, setEndTime] = useState('');     // <-- Added
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
   const [note, setNote] = useState('');
   const [isIssueChecked, setIsIssueChecked] = useState(false);
   const [isDelayChecked, setIsDelayChecked] = useState(false);
@@ -20,19 +21,33 @@ const StartTask = () => {
     handleChangeTask: () => console.log('Change Task Clicked (Not Implemented)'),
     handleSubmit: (e) => {
       e.preventDefault();
+       // --- Simple validation for selectedOperations ---
+      if (selectedOperations.length === 0) {
+        alert('Please add at least one operation.');
+        return;
+      }
+      
       const payload = {
-        operation,
+        operation :selectedOperations,
         serial,
         numDevices: Number(numDevices),
-        // hoursSpent: Number(hoursSpent), // <-- Removed
-        startTime, // <-- Added
-        endTime,   // <-- Added
+        startTime,
+        endTime,
         note,
         isIssueChecked,
         isDelayChecked,
       };
       console.log('Submitting task confirmation:', payload);
       setTaskState('idle'); // Reset form
+      // --- Clear form fields on submit ---
+      setSelectedOperations([]);
+      setSerial('');
+      setNumDevices('');
+      setStartTime('');
+      setEndTime('');
+      setNote('');
+      setIsIssueChecked(false);
+      setIsDelayChecked(false);
     },
   };
 
@@ -57,29 +72,17 @@ const StartTask = () => {
 
                 <form className="confirmation-form" onSubmit={handlers.handleSubmit}>
                   
-                  {/* --- UPDATED LABELS --- */}
                   <div className="labels-box">
                     <ul>
-                      <li>OPERATION NAME:</li>
-                      <li>SERIAL NUMBER OF DEVICE USED:</li>
+                      <li>OPERATIONS NAME:</li>
+                      <li>SERIAL NUMBER OF THE DEVICE:</li>
                       <li>ISSUE / DELAY:</li>
                       <li>NUMBER OF DEVICES:</li>
-                      {/* You may want to add more labels here for the new inputs */}
+                      {/* --- Added labels for new time fields --- */}
                     </ul>
                   </div>
                   <div className="inputs-box">
-                    <div className="form-row">
-                      <select
-                        id="operation"
-                        value={operation}
-                        onChange={e => setOperation(e.target.value)}
-                        required
-                      >
-                        <option value="">Select operation</option>
-                        <option value="IO-Alpha">IO-Alpha</option>
-                      </select>
-                    </div>
-
+                    
                     <div className="form-row">
                       <select
                         id="serial"
@@ -91,6 +94,64 @@ const StartTask = () => {
                         <option value="SN-1001">SN-1001</option>
                       </select>
                     </div>
+
+                    {/* --- CHANGED: Wrapped in form-row for spacing --- */}
+                    <div className="form-row">
+                      <div className="operation-select-wrapper">
+                          <div className="operation-select-row">
+                            <select
+                              id="operation"
+                              value={operationChoice}
+                              onChange={e => setOperationChoice(e.target.value)}
+                              aria-label="Select operation to add"
+                            >
+                              <option value="">Select an operation</option>
+                              {operationOptions
+                                .filter(opt => !selectedOperations.includes(opt))
+                                  .map(opt => (
+                                  <option key={opt} value={opt}>{opt}</option>
+                                ))
+                              }
+                            </select>
+                            <button
+                              type="button"
+                              // --- CHANGED: Updated class for styling ---
+                              className="btn btn-accent" 
+                              onClick={() => {
+                                if (!operationChoice) return;
+                                if (!selectedOperations.includes(operationChoice)) {
+                                  setSelectedOperations(prev => [...prev, operationChoice]);
+                                }
+                                setOperationChoice('');                            }}
+                              disabled={!operationChoice}
+                            >
+                              Add
+                            </button>
+                          </div>
+
+                          {/* Selected operations shown below the select */}
+                          {/* --- CHANGED: Added class for horizontal layout --- */}
+                          <div className="selected-operations horizontal-layout">
+                            {selectedOperations.length === 0 && (
+                              <div className="hint">No operations added yet</div>
+                            )}
+                            {selectedOperations.map(op => (
+                              <div key={op} className="operation-chip">
+                                <span className="operation-name">{op}</span>
+                              <button
+                                  type="button"
+                                  className="remove-op"
+                                  onClick={() => setSelectedOperations(prev => prev.filter(x => x !== op))}
+                                  aria-label={`Remove ${op}`}
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                    </div> {/* --- End of new form-row wrapper --- */}
+
                     <div className="form-row check-boxes">
                       <label>
                         <input
@@ -110,8 +171,6 @@ const StartTask = () => {
                       </label>
                     </div>
 
-                    {/* --- MODIFIED SECTION --- */}
-                    {/* 1. Number of devices in its own full-width row */}
                     <div className="form-row">
                       <input
                         id="numDevices"
@@ -124,7 +183,6 @@ const StartTask = () => {
                       />
                     </div>
 
-                    {/* 2. New row for side-by-side time inputs */}
                     <div className="form-row small-inputs">
                       <div className="small-field">
                         <label htmlFor="startTime">Task started</label>
@@ -148,10 +206,10 @@ const StartTask = () => {
                         />
                       </div>
                     </div>
-                    {/* --- END OF MODIFIED SECTION --- */}
 
-                    {/* --- Textarea is now its own row --- */}
                     <div className="form-row">
+                     <label htmlFor="startTime">Notes</label>
+
                       <textarea
                         id="note"
                         rows={4}

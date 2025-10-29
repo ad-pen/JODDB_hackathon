@@ -23,6 +23,87 @@ $muted: #9b9b9b;
 }
 
 /* --- Base --- */
+/* --- STYLES FOR OPERATION SELECTION --- */
+    .form-row {
+      /* This ensures all form rows have space between them, 
+         fixing the gap between operations and checkboxes.
+         It's already defined above, but good to be aware. */
+      // gap: 1rem; (from .inputs-box)
+    }
+
+    .operation-select-wrapper {
+      width: 100%;
+      
+      .operation-select-row {
+        display: flex;
+        gap: 0.75rem; // Space between select and button
+
+        select {
+          flex: 1; // Make select box take up available space
+        }
+      }
+
+      /* Container for the added operation chips */
+      .selected-operations.horizontal-layout {
+        display: flex;
+        flex-direction: row; // Line up horizontally
+        flex-wrap: wrap;     // Wrap to next line if needed
+        gap: 8px;           // Space between chips
+        margin-top: 12px;   // Space below the "Add" button row
+      }
+
+      .operation-chip {
+        display: flex;
+        align-items: center;
+        padding: 4px 8px;
+        background-color: #e0e0e0;
+        border-radius: 16px;
+        font-size: 0.9rem;
+        width: auto; // Ensure it doesn't take 100% width
+        flex-shrink: 0;
+
+        .remove-op {
+          margin-left: 8px;
+          background: #a0a0a0;
+          color: white;
+          border: none;
+          border-radius: 50%;
+          width: 18px;
+          height: 18px;
+          line-height: 18px;
+          text-align: center;
+          cursor: pointer;
+          font-weight: bold;
+
+          &:hover {
+            background: #c00;
+          }
+        }
+      }
+    }
+    
+    /* --- Golden Button Style --- */
+    .btn-accent {
+      // Inherit base button styles
+      @extend .btn; 
+
+      // --- Golden Style ---
+      background-color: #f0b90b; // A golden/yellow color
+      color: #1e2329; // Dark text for contrast
+      flex-shrink: 0; // Stop it from shrinking
+
+      &:hover {
+        background-color: #f3c74a !important; // Lighter gold on hover
+        transform: translateY(-2px);
+      }
+
+      &:disabled {
+        background-color: #cccccc !important;
+        color: #666666 !important;
+        cursor: not-allowed;
+      }
+    }
+    /* --- END OF OPERATION STYLES --- */
 .page-container {
   display: flex;
   flex-direction: column;
@@ -138,10 +219,20 @@ $muted: #9b9b9b;
   }
 
   // --- FIX 4: Label Alignment ---
+  // In styles_task_starting.scss
+
   .labels-box {
-    ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1rem; }
+    ul { 
+      list-style: none; 
+      margin: 0; 
+      padding: 0; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 1rem; 
+    }
+
     li {
-      padding: 0 1.15rem; // Use padding only for left/right
+      padding: 0 1.15rem;
       font-weight: 700;
       color: $dark-text;
       font-size: 0.98rem;
@@ -150,19 +241,31 @@ $muted: #9b9b9b;
       border-radius: 8px;
       box-sizing: border-box;
       
-      // --- Vertically center text ---
+      // Vertically center text by default
       display: flex;
       align-items: center; 
       
-      // Match input heights
-      &:nth-child(1), // Operation
-      &:nth-child(2), // Serial
-      &:nth-child(3), // Checkboxes
-      &:nth-child(4) { // Small inputs (now numDevices)
+      // --- THIS IS THE CORRECTED LOGIC ---
+
+      // These labels match 52px inputs
+      &:nth-child(1), // Serial
+      &:nth-child(3), // Issue / Delay
+      &:nth-child(4), // Number of Devices
+      
+      &:nth-child(5) { // Task Times
         height: 52px;
       }
       
-      &:nth-child(5) { // Note
+      // This label matches the variable-height Operations input
+      &:nth-child(2) { 
+        min-height: 52px;      // Match min-height
+        height: auto;          // Allow to grow
+        align-items: flex-start; // Align text to top
+        padding-top: 1rem;       // Add padding
+      }
+      
+      // This label matches the 180px textarea
+      &:nth-child(6) { 
         min-height: 180px;
         align-items: flex-start; // Align label to top
         padding-top: 1rem; // Add padding to match textarea
