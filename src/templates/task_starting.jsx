@@ -8,7 +8,9 @@ const StartTask = () => {
   const [operation, setOperation] = useState('');
   const [serial, setSerial] = useState('');
   const [numDevices, setNumDevices] = useState('');
-  const [hoursSpent, setHoursSpent] = useState('');
+  // const [hoursSpent, setHoursSpent] = useState(''); // <-- Removed
+  const [startTime, setStartTime] = useState(''); // <-- Added
+  const [endTime, setEndTime] = useState('');     // <-- Added
   const [note, setNote] = useState('');
   const [isIssueChecked, setIsIssueChecked] = useState(false);
   const [isDelayChecked, setIsDelayChecked] = useState(false);
@@ -22,7 +24,9 @@ const StartTask = () => {
         operation,
         serial,
         numDevices: Number(numDevices),
-        hoursSpent: Number(hoursSpent),
+        // hoursSpent: Number(hoursSpent), // <-- Removed
+        startTime, // <-- Added
+        endTime,   // <-- Added
         note,
         isIssueChecked,
         isDelayChecked,
@@ -39,10 +43,10 @@ const StartTask = () => {
           <div className="task-sidebar">
             <div className="left-column-container">
               <div className="task-icon-placeholder">
-                <img src={Person} className='person-logo' alt="Start task icon"/>
+                <img src={Person} className='person-logo' alt=" task icon"/>
               </div>
               <button className="btn btn-primary" onClick={handlers.handleShowTask}>
-                START A NEW TASK
+                LOG IN A NEW TASK
               </button>
             </div>
           </div>
@@ -58,6 +62,8 @@ const StartTask = () => {
                       <li>OPERATION NAME:</li>
                       <li>SERIAL NUMBER OF DEVICE USED:</li>
                       <li>ISSUE / DELAY:</li>
+                      <li>NUMBER OF DEVICES:</li>
+                      {/* You may want to add more labels here for the new inputs */}
                     </ul>
                   </div>
                   <div className="inputs-box">
@@ -102,32 +108,47 @@ const StartTask = () => {
                         Delay
                       </label>
                     </div>
+
+                    {/* --- MODIFIED SECTION --- */}
+                    {/* 1. Number of devices in its own full-width row */}
+                    <div className="form-row">
+                      <input
+                        id="numDevices"
+                        type="number"
+                        min="0"
+                        value={numDevices}
+                        onChange={e => setNumDevices(e.target.value)}
+                        required
+                        placeholder="Number of devices"
+                      />
+                    </div>
+
+                    {/* 2. New row for side-by-side time inputs */}
                     <div className="form-row small-inputs">
                       <div className="small-field">
+                        <label htmlFor="startTime">Task started</label>
                         <input
-                          id="numDevices"
-                          type="number"
-                          min="0"
-                          value={numDevices}
-                          onChange={e => setNumDevices(e.target.value)}
+                          id="startTime"
+                          type="time"
+                          value={startTime}
+                          onChange={e => setStartTime(e.target.value)}
                           required
-                          placeholder="Number of devices"
                         />
                       </div>
 
                       <div className="small-field">
+                        <label htmlFor="endTime">Task ended</label>
                         <input
-                          id="hoursSpent"
-                          type="number"
-                          min="0"
-                          step="0.1"
-                          value={hoursSpent}
-                          onChange={e => setHoursSpent(e.target.value)}
+                          id="endTime"
+                          type="time"
+                          value={endTime}
+                          onChange={e => setEndTime(e.target.value)}
                           required
-                          placeholder="Hours spent"
                         />
                       </div>
                     </div>
+                    {/* --- END OF MODIFIED SECTION --- */}
+
                     <div className="form-row">
                       <textarea
                         id="note"

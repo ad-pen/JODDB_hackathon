@@ -18,7 +18,17 @@ const mockTaskDetails = {
   actualOutput: 48,
   hoursSpent: '2.5',
 };
-const TaskPreviewModal = ({ task, onClose }) => {
+
+// --- MODIFIED TaskPreviewModal ---
+const TaskPreviewModal = ({ task, onClose, onApprove }) => {
+  // Add state for the note
+  const [note, setNote] = useState('');
+
+  const handleApproveClick = () => {
+    // Pass the note up to the parent component
+    onApprove(note);
+  };
+
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -30,30 +40,58 @@ const TaskPreviewModal = ({ task, onClose }) => {
           <li>EXPECTED OUTPUT NUMBER: <span>{task.expectedOutput}</span></li>
           <li>ACTUAL OUTPUT: <span>{task.actualOutput}</span></li>
           <li>HOURS SPENT: <span>{task.hoursSpent}</span></li>
+          
+          {/* --- NEW NOTE SECTION --- */}
+          <li className="note-section">
+            <label htmlFor="adminNote">ADD A NOTE:</label>
+            <textarea
+              id="adminNote"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="Add an optional note..."
+              rows={3}
+            />
+          </li>
+          {/* --- END NEW NOTE SECTION --- */}
         </ul>
         <div className="modal-actions">
-          <button className="modal-btn approve" onClick={onClose}>✔</button>
+          {/* Updated to call handleApproveClick */}
+          <button className="modal-btn approve" onClick={handleApproveClick}>✔</button>
+          {/* Kept as onClose */}
           <button className="modal-btn reject" onClick={onClose}>✖</button>
         </div>
       </div>
     </div>
   );
 };
+
 const AdminTasksPage = () => {
   const [showTasks, setShowTasks] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
+
   const handleEnter = (e) => {
     e.preventDefault();
     setShowTasks(true);
   };
+
   const handleTaskClick = (task) => {
     setSelectedTask(mockTaskDetails); 
     setIsModalOpen(true);
   };
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedTask(null);
+  };
+
+  // --- NEW: Handle Approve ---
+  // This function receives the note from the modal
+  const handleApprove = (note) => {
+    console.log('Task Approved!');
+    console.log('Submitted Note:', note);
+    // Now, close the modal
+    handleCloseModal();
   };
 
   return (
@@ -110,7 +148,11 @@ const AdminTasksPage = () => {
       </main>
 
       {isModalOpen && (
-        <TaskPreviewModal task={selectedTask} onClose={handleCloseModal} />
+        <TaskPreviewModal 
+          task={selectedTask} 
+          onClose={handleCloseModal} 
+          onApprove={handleApprove} // Pass the new handler
+        />
       )}
     </>
   );

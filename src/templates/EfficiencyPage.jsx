@@ -63,8 +63,8 @@ const EmployeeEfficiencyCard = ({ employee }) => {
         <div className="user-details">
           <h2 className="user-name">{employee.name}</h2>
           <div className="user-stats">
-            <span>Total Working Hours: <strong>{employee.totalHours}</strong></span>
-            <span>Total Output: <strong>{employee.totalOutput}</strong></span>
+            <span>TIME SPENT: <strong>{employee.time}</strong></span>
+            <span>STANDARD TIME: <strong>{employee.totalOutput}</strong></span>
           </div>
         </div>
       </div>
