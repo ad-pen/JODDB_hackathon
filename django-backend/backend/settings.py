@@ -98,6 +98,12 @@ AUTH_USER_MODEL = 'api.User'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
+        'NAME': 'api.validators.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 20,
+        }
+    },
+    {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {

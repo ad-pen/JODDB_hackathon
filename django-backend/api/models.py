@@ -19,6 +19,7 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
+    password_changed_at = models.DateTimeField(null=True, blank=True)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username']
 
@@ -26,6 +27,10 @@ class User(AbstractUser):
         #Ensure superusers have a role or default to planner
         if self.is_superuser and not self.role:
             self.role = self.ROLE_PLANNER
+
+    def set_password(self, raw_password):
+        super().set_password(raw_password)
+        self.password_changed_at = timezone.now()
 
     def __str__(self):
         return f"{self.username} ({self.role})"
@@ -56,6 +61,8 @@ class Task(models.Model):
     actual_time = models.PositiveIntegerField()
     device_instances = models.ManyToManyField('DeviceInstance', related_name='tasks', blank=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=STATUS_PENDING)
+    start_at = models.DateTimeField()
+    end_at = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

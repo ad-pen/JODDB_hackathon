@@ -32,11 +32,7 @@ const StartTask = () => {
         isDelayChecked,
       };
       console.log('Submitting task confirmation:', payload);
-<<<<<<< HEAD
       setTaskState('idle'); // Reset form
-=======
-      setTaskState('idle'); 
->>>>>>> branch4
     },
   };
 
@@ -61,27 +57,16 @@ const StartTask = () => {
 
                 <form className="confirmation-form" onSubmit={handlers.handleSubmit}>
                   
-<<<<<<< HEAD
                   {/* --- UPDATED LABELS --- */}
-=======
->>>>>>> branch4
                   <div className="labels-box">
                     <ul>
                       <li>OPERATION NAME:</li>
                       <li>SERIAL NUMBER OF DEVICE USED:</li>
-<<<<<<< HEAD
-                      <li>ISSUE / DELAY:</li> {/* Added for checkboxes */}
-                    </ul>
-                  </div>
-
-                  {/* --- UPDATED INPUTS --- */}
-=======
                       <li>ISSUE / DELAY:</li>
                       <li>NUMBER OF DEVICES:</li>
                       {/* You may want to add more labels here for the new inputs */}
                     </ul>
                   </div>
->>>>>>> branch4
                   <div className="inputs-box">
                     <div className="form-row">
                       <select
@@ -125,29 +110,6 @@ const StartTask = () => {
                       </label>
                     </div>
 
-<<<<<<< HEAD
-                    {/* --- Checkboxes moved to their own row --- */}
-                    <div className="form-row check-boxes">
-                      <label>
-                        <input
-                          type="checkbox"
-                          checked={isIssueChecked}
-                          onChange={() => setIsIssueChecked(!isIssueChecked)}
-                        />
-                        Issue
-                      </label>
-                      <label>
-                        <input
-                          type="checkbox"
-                          checked={isDelayChecked}
-                          onChange={() => setIsDelayChecked(!isDelayChecked)}
-                        />
-                        Delay
-                      </label>
-                    </div>
-
-                    {/* --- Num Devices and Hours Spent are now in one row --- */}
-=======
                     {/* --- MODIFIED SECTION --- */}
                     {/* 1. Number of devices in its own full-width row */}
                     <div className="form-row">
@@ -163,7 +125,6 @@ const StartTask = () => {
                     </div>
 
                     {/* 2. New row for side-by-side time inputs */}
->>>>>>> branch4
                     <div className="form-row small-inputs">
                       <div className="small-field">
                         <label htmlFor="startTime">Task started</label>
@@ -173,10 +134,6 @@ const StartTask = () => {
                           value={startTime}
                           onChange={e => setStartTime(e.target.value)}
                           required
-<<<<<<< HEAD
-                          placeholder="Number of devices"
-=======
->>>>>>> branch4
                         />
                       </div>
 
@@ -188,10 +145,6 @@ const StartTask = () => {
                           value={endTime}
                           onChange={e => setEndTime(e.target.value)}
                           required
-<<<<<<< HEAD
-                          placeholder="Hours spent"
-=======
->>>>>>> branch4
                         />
                       </div>
                     </div>

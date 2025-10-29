@@ -38,7 +38,7 @@ const LoginPage = () => {
         );
         if (data.role === 'technician') navigate('/start-task');
         else if (data.role === 'supervisor') navigate('/admin');
-        else if (data.role === 'planner' || data.role === 'Planner') navigate('/admin');
+        else if (data.role === 'planner' || data.role === 'Planner') navigate('dashboard');
         else setError('Unknown user role');
       } else {
         setError('Invalid email or password');

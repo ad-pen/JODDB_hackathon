@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 // 1. Import Link from react-router-dom
-=======
-import React, { useState } from 'react';
-
->>>>>>> branch4
 import { Link } from 'react-router-dom';
 import Logo from '../assets/cover_login.png';
 import '../static/styles_header.scss'
