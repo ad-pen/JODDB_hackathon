@@ -8,7 +8,9 @@ const StartTask = () => {
   const [operationChoice, setOperationChoice] = useState(''); 
   const [selectedOperations, setSelectedOperations] = useState([]);
   const operationOptions = ['IO-Alpha', 'IO-Beta', 'IO-Gamma'];
-  const [serial, setSerial] = useState('');
+  const [serialChoice, setSerialchoice] = useState('');
+  const [selectedSerial, setSelectedSerial] = useState([]);
+  const serialOptions = ['SN-1003', 'SN-1002', 'SN-1001'];
   const [numDevices, setNumDevices] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
@@ -29,7 +31,7 @@ const StartTask = () => {
       
       const payload = {
         operation :selectedOperations,
-        serial,
+        serial : selectedSerial,
         numDevices: Number(numDevices),
         startTime,
         endTime,
@@ -41,7 +43,7 @@ const StartTask = () => {
       setTaskState('idle'); // Reset form
       // --- Clear form fields on submit ---
       setSelectedOperations([]);
-      setSerial('');
+      setSerialchoice([]);
       setNumDevices('');
       setStartTime('');
       setEndTime('');
@@ -84,16 +86,59 @@ const StartTask = () => {
                   <div className="inputs-box">
                     
                     <div className="form-row">
+                      <div className="operation-select-wrapper operation-serial-wrapper">
+                        <div className="operation-select-row"></div>
                       <select
                         id="serial"
-                        value={serial}
-                        onChange={e => setSerial(e.target.value)}
-                        required
+                        value={serialChoice}
+                        onChange={e => setSerialchoice(e.target.value)}
+                        aria-label="Select serial number to add"
                       >
-                        <option value="">Select serial</option>
-                        <option value="SN-1001">SN-1001</option>
+                        <option value="">Select a serial num</option>
+                        {operationOptions
+                                .filter(opt => !selectedSerial.includes(opt))
+                                  .map(opt => (
+                                  <option key={opt} value={opt}>{opt}</option>
+                                ))
+                              }
                       </select>
-                    </div>
+                      <button
+                              type="button"
+                              // --- CHANGED: Updated class for styling ---
+                              className="btn btn-accent" 
+                              onClick={() => {
+                                if (!serialChoice) return;
+                                if (!selectedSerial.includes(serialChoice)) {
+                                  setSelectedOperations(prev => [...prev, serialChoice]);
+                                }
+                                setSerialchoice('');                            }}
+                              disabled={!serialChoice}
+                            >
+                              Add
+                            </button>
+                          </div>
+
+                          {/* Selected operations shown below the select */}
+                          {/* --- CHANGED: Added class for horizontal layout --- */}
+                          <div className="selected-operations horizontal-layout">
+                            {selectedSerial.length === 0 && (
+                              <div className="hint">No serial added yet</div>
+                            )}
+                            {selectedSerial.map(op => (
+                              <div key={op} className="operation-chip">
+                                <span className="operation-name">{op}</span>
+                              <button
+                                  type="button"
+                                  className="remove-op"
+                                  onClick={() => setSelectedSerial(prev => prev.filter(x => x !== op))}
+                                  aria-label={`Remove ${op}`}
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
 
                     {/* --- CHANGED: Wrapped in form-row for spacing --- */}
                     <div className="form-row">

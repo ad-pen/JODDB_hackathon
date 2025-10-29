@@ -30,10 +30,15 @@ $muted: #9b9b9b;
          It's already defined above, but good to be aware. */
       // gap: 1rem; (from .inputs-box)
     }
-
+    .operation-serial-wrapper {
+      display: flex
+    }
+    #serial {
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
     .operation-select-wrapper {
       width: 100%;
-      
       .operation-select-row {
         display: flex;
         gap: 0.75rem; // Space between select and button
@@ -228,7 +233,7 @@ $muted: #9b9b9b;
       padding: 0; 
       display: flex; 
       flex-direction: column; 
-      gap: 1rem; 
+      gap: 2.2rem; 
     }
 
     li {

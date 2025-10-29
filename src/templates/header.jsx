@@ -64,6 +64,10 @@ const Header = () => {
           <nav className="dropdown-menu">
           <Link to="/submitted-tasks" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>Submitted Tasks</Link>
           <Link to="/start-task" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>Tasks</Link>
+          <Link to="/admin" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>Admin</Link>
+          <Link to="/dashboard" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>Dashboard</Link>
+          <Link to="/productivity" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>Productivity</Link>
+          <Link to="/utilization" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>Utilization</Link>
           <Link to="/" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>Logout</Link>
         </nav>
       </div>
