@@ -78,7 +78,7 @@ const StartTask = () => {
                     <ul>
                       <li>OPERATIONS NAME:</li>
                       <li>SERIAL NUMBER OF THE DEVICE:</li>
-                      <li>ISSUE / DELAY:</li>
+                      <li className='issue-delay-text'>ISSUE / DELAY:</li>
                       <li>NUMBER OF DEVICES:</li>
                       {/* --- Added labels for new time fields --- */}
                     </ul>

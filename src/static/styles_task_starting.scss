@@ -226,6 +226,7 @@ $muted: #9b9b9b;
   // --- FIX 4: Label Alignment ---
   // In styles_task_starting.scss
 
+// ...existing code...
   .labels-box {
     ul { 
       list-style: none; 
@@ -233,9 +234,8 @@ $muted: #9b9b9b;
       padding: 0; 
       display: flex; 
       flex-direction: column; 
-      gap: 2.2rem; 
+      /* Removed gap here so we can control spacing per-item */
     }
-
     li {
       padding: 0 1.15rem;
       font-weight: 700;
@@ -246,13 +246,24 @@ $muted: #9b9b9b;
       border-radius: 8px;
       box-sizing: border-box;
       
-      // Vertically center text by default
       display: flex;
       align-items: center; 
-      
-      // --- THIS IS THE CORRECTED LOGIC ---
 
-      // These labels match 52px inputs
+      /* default spacing between items */
+      margin-bottom: 2.7rem;
+
+      /* reduce the gap specifically between the before-last and last item */
+      /* nth-last-child(2) targets the second-to-last li */
+      &:nth-last-child(2) {
+        margin-bottom: 1.24rem; /* adjust this value as needed */
+      }
+
+      /* remove bottom margin on the last item */
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      /* ...rest of the existing per-child height rules... */
       &:nth-child(1), // Serial
       &:nth-child(3), // Issue / Delay
       &:nth-child(4), // Number of Devices
@@ -261,22 +272,21 @@ $muted: #9b9b9b;
         height: 52px;
       }
       
-      // This label matches the variable-height Operations input
       &:nth-child(2) { 
-        min-height: 52px;      // Match min-height
-        height: auto;          // Allow to grow
-        align-items: flex-start; // Align text to top
-        padding-top: 1rem;       // Add padding
+        min-height: 52px;
+        height: auto;
+        align-items: flex-start;
+        padding-top: 1rem;
       }
       
-      // This label matches the 180px textarea
       &:nth-child(6) { 
         min-height: 180px;
-        align-items: flex-start; // Align label to top
-        padding-top: 1rem; // Add padding to match textarea
+        align-items: flex-start;
+        padding-top: 1rem;
       }
     }
   }
+// ...existing code...
   // -----------------------------
 
   /* --- Inputs Column --- */

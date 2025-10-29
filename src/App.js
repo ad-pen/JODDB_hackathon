@@ -1,4 +1,4 @@
-import React from 'react';
+  import React from 'react';
 // 1. Import Routes, Route, and Outlet
 import { Routes, Route, Outlet } from 'react-router-dom';
 
@@ -12,6 +12,7 @@ import JobOrderProgressPage from './templates/jobOrderProgressBar';
 import ProductivityPage from './templates/ProductivityPage';
 import UtilizationPage from './templates/UtilizationPage';
 import EfficiencyPage from './templates/EfficiencyPage';
+import AllOrdersPage from './templates/allOrderPage';
 /**
  * This component wraps all pages that SHOULD have the header.
  * The <Outlet> component renders the active nested route (e.g., StartTask).
@@ -50,6 +51,7 @@ function App() {
         <Route path='/productivity' element={<ProductivityPage />} />
         <Route path='/efficiency' element={<EfficiencyPage />} />
         <Route path='/utilization' element={<UtilizationPage />} />
+        <Route path="/all-orders" element={<AllOrdersPage />} />
         {/* You can add more routes here, e.g., for Notifications */}
         {/* <Route path="/notifications" element={<NotificationsPage />} /> */}
       </Route>
