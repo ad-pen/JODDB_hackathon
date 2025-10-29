@@ -17,7 +17,89 @@ $input-border: #c0bfbf;
   color: $dark-text;
   overflow-x: hidden;
 }
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap; // Allows stacking on small screens
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 1000px; // Match container width
+  margin-bottom: 2.5rem;
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 
+  .filter-search {
+    flex-grow: 1; // Takes up available space
+    min-width: 250px;
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box; // Fixes padding issues
+  }
+
+  .filter-date-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    label {
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: #555;
+    }
+
+    .filter-date {
+      font-size: 1rem;
+      padding: 0.65rem 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: sans-serif; // Ensures consistent font
+    }
+  }
+}
+
+// --- No Results Message ---
+.no-results-message {
+  font-size: 1.2rem;
+  color: #777;
+  text-align: center;
+  width: 100%;
+  padding: 3rem 0;
+}
+
+// --- Responsive tweak for filters ---
+@media (max-width: 768px) {
+  .filter-controls {
+    flex-direction: column;
+    align-items: stretch; // Makes inputs full-width
+
+    .filter-search,
+    .filter-date-group {
+      width: 100%;
+    }
+
+    .filter-date-group {
+      justify-content: space-between; // Spreads label and input
+
+      .filter-date {
+        width: 70%;
+      }
+    }
+  }
+}
+
+// --- Small tweak to employee card stats ---
+// (This is to make room for the new date line)
+.employee-card .employee-info .user-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; // Adds a bit of space between lines
+  align-items: flex-start;
+}
 .main-content {
   flex-grow: 1;
   width: 100%;
