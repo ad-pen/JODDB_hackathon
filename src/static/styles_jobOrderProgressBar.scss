@@ -1,0 +1,236 @@
+// --- Variables (adjust as needed, or import from a central styles file) ---
+$primary-color: #a98b4f;
+$secondary-color: #d1d1d1;
+$dark-text: #333333;
+$light-text: #ffffff;
+$bg-light-gray: #f0f0f0; // Background for cards
+$bg-white: #ffffff;
+
+// --- Base Styles ---
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: $bg-white;
+  font-family: sans-serif;
+  color: $dark-text;
+  overflow-x: hidden; // Prevent horizontal scrolling
+}
+
+.main-content {
+  flex-grow: 1;
+  width: 100vw;
+  max-width: 1200px; // Constrain content width
+  margin: 0 auto; // Center content
+  padding: 2rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center; // Center content sections
+}
+
+// --- Job Order Progress Section ---
+// ... (no changes to this section) ...
+.job-order-section {
+  width: 100%;
+  margin-bottom: 3rem;
+  text-align: center; // Center the title button
+
+  .section-title-button {
+    background: none;
+    border: none;
+    color: $dark-text;
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 2.5rem;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    position: relative;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: $primary-color;
+    }
+    
+    &::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: -10px;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 4px;
+      background-color: $primary-color;
+      border-radius: 2px;
+      opacity: 0;
+      transition: width 0.3s ease, opacity 0.3s ease;
+    }
+
+    &:hover::after {
+      width: 100%;
+      opacity: 1;
+    }
+  }
+
+  .progress-bars-container {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    width: 100%;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+  }
+
+  .progress-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: $dark-text;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+    }
+
+    .order-label {
+      font-weight: bold;
+      min-width: 80px;
+      text-align: right;
+    }
+
+    .progress-bar-wrapper {
+      width: 200px;
+      height: 20px;
+      background-color: $secondary-color;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+
+    .progress-bar {
+      height: 100%;
+      border-radius: 10px;
+      background: linear-gradient(to right, #6bb9f0, #22a7f0);
+    }
+
+    .progress-bar-1 {
+      width: 70%;
+      background: linear-gradient(to right, #9ADFEE, #5BC0EB);
+    }
+    .progress-bar-2 {
+      width: 50%;
+      background: linear-gradient(to right, #9ADFEE, #5BC0EB);
+    }
+  }
+}
+
+// --- KPI Cards Section ---
+.kpi-cards-section {
+  width: 100%;
+  // --- CHANGED: Use flexbox for the 3-column row ---
+  display: flex;
+  justify-content: center;
+  align-items: stretch; // Makes cards equal height
+  gap: 2.5rem;
+  margin-top: 3rem;
+
+  .card {
+    background-color: $bg-light-gray;
+    border-radius: 12px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    // --- CHANGED: Use flex-basis for column width ---
+    flex-basis: 300px; // Set a base width for each card
+    max-width: 320px;
+
+    // --- CHANGED: Made card taller ---
+    min-height: 260px;
+
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .icon-wrapper {
+      // --- CHANGED: Made icon bigger ---
+      width: 110px;
+      height: 110px;
+      margin-bottom: 1.5rem;
+
+      img {
+        width: 150%;
+        height: 150%;
+        object-fit: contain;
+      }
+    }
+
+    .card-title {
+      font-size: 2rem;
+      font-weight: bold;
+      color: $primary-color;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+}
+
+// --- Responsive Adjustments ---
+@media (max-width: 1024px) {
+  // --- NEW: Stack the flexbox cards on tablets ---
+  .kpi-cards-section {
+    flex-direction: column;
+    align-items: center;
+
+    .card {
+      flex-basis: auto; // Reset basis
+      width: 100%;
+      max-width: 450px;
+    }
+  }
+}
+
+@media (max-width: 580px) {
+  .main-content {
+    padding: 1rem;
+  }
+
+  .job-order-section .section-title-button {
+    font-size: 1.4rem;
+    margin-bottom: 2rem;
+  }
+
+  .job-order-section .progress-item {
+    flex-direction: column;
+    .order-label {
+      min-width: unset;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    .progress-bar-wrapper {
+      width: 180px;
+    }
+  }
+  
+  // --- UPDATED: No longer need this, 1024px query handles it ---
+  // .kpi-cards-section {
+  //   gap: 1.5rem;
+  //   padding: 0 1rem;
+  //   grid-template-columns: 1fr;
+  // }
+}

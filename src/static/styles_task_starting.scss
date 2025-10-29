@@ -158,7 +158,7 @@ $muted: #9b9b9b;
       &:nth-child(1), // Operation
       &:nth-child(2), // Serial
       &:nth-child(3), // Checkboxes
-      &:nth-child(4) { // Small inputs
+      &:nth-child(4) { // Small inputs (now numDevices)
         height: 52px;
       }
       
@@ -182,8 +182,10 @@ $muted: #9b9b9b;
       width: 100%;
     }
 
+    // --- MODIFICATION 1: Added input[type="time"] ---
     select,
     input[type="number"],
+    input[type="time"],
     textarea {
       width: 100%;
       padding: 0.95rem 1rem;
@@ -196,8 +198,10 @@ $muted: #9b9b9b;
       transition: border-color 0.12s ease, box-shadow 0.12s ease;
     }
 
+    // --- MODIFICATION 2: Added input[type="time"] height ---
     select { height: 52px; }
     input[type="number"] { height: 52px; }
+    input[type="time"] { height: 52px; }
     textarea { min-height: 180px; padding-top: 0.9rem; resize: vertical; }
 
     // --- FIX 1, 2, 3: Checkbox Row ---
@@ -207,6 +211,7 @@ $muted: #9b9b9b;
       align-items: center;
       justify-content: flex-start; // Center the checkboxes
       height: 52px; // Match input height
+
       label {
         display: flex;
         align-items: center;
@@ -228,7 +233,19 @@ $muted: #9b9b9b;
       gap: 1rem;
       align-items: center;
 
-      .small-field { flex: 1; }
+      .small-field { 
+        flex: 1; 
+        
+        // --- MODIFICATION 3: Added label styles ---
+        label {
+          display: block;
+          margin-bottom: 0.25rem;
+          font-size: 0.8rem; 
+          color: $muted; 
+          padding-left: 0.25rem;
+          font-weight: 500;
+        }
+      }
 
       input { height: 52px; }
     }

@@ -8,7 +8,9 @@ const StartTask = () => {
   const [operation, setOperation] = useState('');
   const [serial, setSerial] = useState('');
   const [numDevices, setNumDevices] = useState('');
-  const [hoursSpent, setHoursSpent] = useState('');
+  // const [hoursSpent, setHoursSpent] = useState(''); // <-- Removed
+  const [startTime, setStartTime] = useState(''); // <-- Added
+  const [endTime, setEndTime] = useState('');     // <-- Added
   const [note, setNote] = useState('');
   const [isIssueChecked, setIsIssueChecked] = useState(false);
   const [isDelayChecked, setIsDelayChecked] = useState(false);
@@ -22,13 +24,15 @@ const StartTask = () => {
         operation,
         serial,
         numDevices: Number(numDevices),
-        hoursSpent: Number(hoursSpent),
+        // hoursSpent: Number(hoursSpent), // <-- Removed
+        startTime, // <-- Added
+        endTime,   // <-- Added
         note,
         isIssueChecked,
         isDelayChecked,
       };
       console.log('Submitting task confirmation:', payload);
-      setTaskState('idle'); // Reset form
+      setTaskState('idle'); 
     },
   };
 
@@ -36,20 +40,16 @@ const StartTask = () => {
     <div className="page-container">
       <main className="main-content">
         <div className="task-view-container">
-
-          {/* Left Column (Always Visible) */}
           <div className="task-sidebar">
             <div className="left-column-container">
               <div className="task-icon-placeholder">
-                <img src={Person} className='person-logo' alt="Start task icon"/>
+                <img src={Person} className='person-logo' alt=" task icon"/>
               </div>
               <button className="btn btn-primary" onClick={handlers.handleShowTask}>
-                START A NEW TASK
+                LOG IN A NEW TASK
               </button>
             </div>
           </div>
-
-          {/* Middle Column (Task Confirmation Form) */}
           <div className={`task-details-section ${taskState !== 'idle' ? 'is-visible' : ''}`}>
             {(taskState !== 'idle') && (
               <>
@@ -57,16 +57,15 @@ const StartTask = () => {
 
                 <form className="confirmation-form" onSubmit={handlers.handleSubmit}>
                   
-                  {/* --- UPDATED LABELS --- */}
                   <div className="labels-box">
                     <ul>
                       <li>OPERATION NAME:</li>
                       <li>SERIAL NUMBER OF DEVICE USED:</li>
-                      <li>ISSUE / DELAY:</li> {/* Added for checkboxes */}
+                      <li>ISSUE / DELAY:</li>
+                      <li>NUMBER OF DEVICES:</li>
+                      {/* You may want to add more labels here for the new inputs */}
                     </ul>
                   </div>
-
-                  {/* --- UPDATED INPUTS --- */}
                   <div className="inputs-box">
                     <div className="form-row">
                       <select
@@ -91,8 +90,6 @@ const StartTask = () => {
                         <option value="SN-1001">SN-1001</option>
                       </select>
                     </div>
-
-                    {/* --- Checkboxes moved to their own row --- */}
                     <div className="form-row check-boxes">
                       <label>
                         <input
@@ -112,35 +109,46 @@ const StartTask = () => {
                       </label>
                     </div>
 
-                    {/* --- Num Devices and Hours Spent are now in one row --- */}
+                    {/* --- MODIFIED SECTION --- */}
+                    {/* 1. Number of devices in its own full-width row */}
+                    <div className="form-row">
+                      <input
+                        id="numDevices"
+                        type="number"
+                        min="0"
+                        value={numDevices}
+                        onChange={e => setNumDevices(e.target.value)}
+                        required
+                        placeholder="Number of devices"
+                      />
+                    </div>
+
+                    {/* 2. New row for side-by-side time inputs */}
                     <div className="form-row small-inputs">
                       <div className="small-field">
+                        <label htmlFor="startTime">Task started</label>
                         <input
-                          id="numDevices"
-                          type="number"
-                          min="0"
-                          value={numDevices}
-                          onChange={e => setNumDevices(e.target.value)}
+                          id="startTime"
+                          type="time"
+                          value={startTime}
+                          onChange={e => setStartTime(e.target.value)}
                           required
-                          placeholder="Number of devices"
                         />
                       </div>
 
                       <div className="small-field">
+                        <label htmlFor="endTime">Task ended</label>
                         <input
-                          id="hoursSpent"
-                          type="number"
-                          min="0"
-                          step="0.1"
-                          value={hoursSpent}
-                          onChange={e => setHoursSpent(e.target.value)}
+                          id="endTime"
+                          type="time"
+                          value={endTime}
+                          onChange={e => setEndTime(e.target.value)}
                           required
-                          placeholder="Hours spent"
                         />
                       </div>
                     </div>
+                    {/* --- END OF MODIFIED SECTION --- */}
 
-                    {/* --- Textarea is now its own row --- */}
                     <div className="form-row">
                       <textarea
                         id="note"
