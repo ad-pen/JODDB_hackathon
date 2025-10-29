@@ -6,3 +6,8 @@ __pycache__/
 */*.cpython-*.pyc
 django-backend/backend/__pycache__/__init__.cpython-313.pyc
 django-backend/backend/__pycache__/settings.cpython-313.pyc
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+package-lock.json
