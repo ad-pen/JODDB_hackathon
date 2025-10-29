@@ -42,10 +42,7 @@ const Header = () => {
 
   return (
     <header className="header">
-      <Link to="/start-task" className="logo-container">
         <span className="logo-placeholder"><img src={Logo} className='logo'/></span>
-      </Link>
-      
       <div className="user-container">
         
         <div className="user-profile">
