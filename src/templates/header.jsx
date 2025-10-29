@@ -6,10 +6,10 @@ import '../static/styles_header.scss'
 import Eng from '../assets/eng.png';
 import Bell from '../assets/bell.svg';
 import Menu from '../assets/menu.png';
-import { use } from 'react';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [whatInTheMenu, setWhatInTheMenu] = useState([]);
   const [username, setUsername] = useState(() => {
     try {
       const u = JSON.parse(localStorage.getItem('user'));
@@ -18,26 +18,57 @@ const Header = () => {
       return 'Username';
     }
   });
-  useEffect(() => {
-    const onStorage = (e) => {
-    if (e.key === 'user') {
-      try {
-        const u = JSON.parse(e.newValue);
-        setUsername(u?.username || u?.email || 'Username');
-      } catch {
-        setUsername('Username');
-      }
+
+  // helper to map role -> menu keys
+  const setMenuForRole = (role) => {
+    if (!role) return ['logout'];
+    const r = String(role).toLowerCase();
+    if (r === 'planner' || r === 'planer')
+      return ['dashboard', 'productivity', 'utilization', 'efficiency', 'logout'];
+    if (r === 'supervisor')
+      return ['admin', 'logout'];
+    if (r === 'technician')
+      return ['start-task', 'submitted-tasks', 'logout'];
+    return ['logout'];
+  };
+
+  const getUserFromLocalStorage = () => {
+    try {
+      return JSON.parse(localStorage.getItem('user'));
+    } catch {
+      return null;
     }
   };
-  window.addEventListener('storage', onStorage);
-  return () => window.removeEventListener('storage', onStorage);
-}, []);
+
+  useEffect(() => {
+    const u = getUserFromLocalStorage();
+    setUsername(u?.username || u?.email || 'Username');
+    setWhatInTheMenu(setMenuForRole(u?.role));
+
+    const onStorage = (e) => {
+      if (e.key === 'user') {
+        const nu = getUserFromLocalStorage();
+        setUsername(nu?.username || nu?.email || 'Username');
+        setWhatInTheMenu(setMenuForRole(nu?.role));
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
   // Function to toggle the menu state
-  const toggleMenu = () => {
-    if (isMenuOpen == false)
-      setIsMenuOpen(true);
-    else
-      setIsMenuOpen(false);
+  const toggleMenu = () => setIsMenuOpen(prev => !prev);
+
+  // map menu keys to routes & labels
+  const menuMap = {
+    'submitted-tasks': { to: '/submitted-tasks', label: 'Submitted Tasks' },
+    'start-task': { to: '/start-task', label: 'Tasks' },
+    'admin': { to: '/admin', label: 'Admin' },
+    'dashboard': { to: '/dashboard', label: 'Dashboard' },
+    'productivity': { to: '/productivity', label: 'Productivity' },
+    'utilization': { to: '/utilization', label: 'Utilization' },
+    'efficiency': { to: '/efficiency', label: 'Efficiency' },
+    'logout': { to: '/', label: 'Logout' },
   };
 
   return (
@@ -59,14 +90,16 @@ const Header = () => {
       </div>
       <div className={`dropdown-container ${isMenuOpen ? 'is-open' : ''}`}>
           <nav className="dropdown-menu">
-          <Link to="/submitted-tasks" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>Submitted Tasks</Link>
-          <Link to="/start-task" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>Tasks</Link>
-          <Link to="/admin" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>Admin</Link>
-          <Link to="/dashboard" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>Dashboard</Link>
-          <Link to="/productivity" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>Productivity</Link>
-          <Link to="/utilization" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>Utilization</Link>
-          <Link to="/" className="dropdown-item" onClick={() => setIsMenuOpen(false)}>Logout</Link>
-        </nav>
+            {whatInTheMenu.map(key => {
+              const item = menuMap[key];
+              if (!item) return null;
+              return (
+                <Link key={key} to={item.to} className="dropdown-item" onClick={() => setIsMenuOpen(false)}>
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
       </div>
 
     </header>
