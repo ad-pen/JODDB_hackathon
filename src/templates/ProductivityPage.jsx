@@ -1,38 +1,31 @@
 import React from 'react';
-import Header from './header'; // Your existing Header component
 import '../static/styles_productivityPage.scss';
-import EngIcon from '../assets/eng.png'; // Using your existing icon as a placeholder
+import EngIcon from '../assets/eng.png';
 
-// --- Mock Data for Employees ---
 const mockEmployees = [
   {
     id: 1,
     name: 'Mustafa Alkilani',
     totalHours: 160,
     totalOutput: 320,
-    icon: EngIcon // Placeholder icon
+    icon: EngIcon
   },
   {
     id: 2,
     name: 'Jane Doe',
     totalHours: 152,
     totalOutput: 350,
-    icon: EngIcon // Placeholder icon
+    icon: EngIcon
   },
   {
     id: 3,
     name: 'John Smith',
     totalHours: 168,
     totalOutput: 300,
-    icon: EngIcon // Placeholder icon
+    icon: EngIcon
   },
 ];
-
-/**
- * A simple, CSS-only mock bar chart
- */
 const MockProductivityChart = ({ hours, output }) => {
-  // Simple ratio to make heights look reasonable
   const maxVal = Math.max(hours, output) * 1.1;
   const hoursHeight = (hours / maxVal) * 100;
   const outputHeight = (output / maxVal) * 100;
@@ -58,16 +51,9 @@ const MockProductivityChart = ({ hours, output }) => {
     </div>
   );
 };
-
-
-/**
- * A single Employee Productivity Card
- */
 const EmployeeProductivityCard = ({ employee }) => {
   return (
-    <div className="employee-card">
-      
-      {/* --- Left Side: Info --- */}
+    <div className="employee-card">     
       <div className="employee-info">
         <div className="user-icon">
           <img src={employee.icon} alt={employee.name} />
@@ -80,8 +66,6 @@ const EmployeeProductivityCard = ({ employee }) => {
           </div>
         </div>
       </div>
-
-      {/* --- Right Side: Chart --- */}
       <div className="employee-chart">
         <MockProductivityChart 
           hours={employee.totalHours} 
@@ -91,11 +75,6 @@ const EmployeeProductivityCard = ({ employee }) => {
     </div>
   );
 };
-
-
-/**
- * The Main Productivity Page Component
- */
 const ProductivityPage = () => {
   return (
     <div className="page-container">

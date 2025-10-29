@@ -1,8 +1,5 @@
 import React from 'react';
 import '../static/styles_jobOrderProgressBar.scss';
-
-// Import icons (replace with actual SVG/PNG imports or use a library like FontAwesome)
-// For demonstration, I'm using placeholder URLs for images.
 import productivityIcon from '../assets/productivity_icon.png'; 
 import efficiencyIcon from '../assets/efficiency_icon.png';
 import utilizationIcon from '../assets/utilization_icon.png';
@@ -10,15 +7,12 @@ import { useNavigate } from 'react-router-dom';
 
 const JobOrderProgressPage = () => {
       const navigate = useNavigate();
-  // Handlers for navigation (replace with actual routing logic)
   const handleJobOrderProgressClick = () => {
     console.log("Navigating to Job Order Progress details...");
-    // Example: history.push('/job-order-details');
   };
 
   const handleOrderClick = (orderNum) => {
     console.log(`Navigating to Order ${orderNum} details...`);
-    // Example: history.push(`/order-details/${orderNum}`);
   };
 
   const handleCardClick = (cardName) => {
@@ -32,7 +26,6 @@ const JobOrderProgressPage = () => {
       navigate('/utilization');
       return;
     }
-    // Example: history.push(`/${cardName.toLowerCase()}`);
   };
 
   return (

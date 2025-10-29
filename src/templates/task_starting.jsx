@@ -28,7 +28,7 @@ const StartTask = () => {
         isDelayChecked,
       };
       console.log('Submitting task confirmation:', payload);
-      setTaskState('idle'); // Reset form
+      setTaskState('idle'); 
     },
   };
 
@@ -36,8 +36,6 @@ const StartTask = () => {
     <div className="page-container">
       <main className="main-content">
         <div className="task-view-container">
-
-          {/* Left Column (Always Visible) */}
           <div className="task-sidebar">
             <div className="left-column-container">
               <div className="task-icon-placeholder">
@@ -48,8 +46,6 @@ const StartTask = () => {
               </button>
             </div>
           </div>
-
-          {/* Middle Column (Task Confirmation Form) */}
           <div className={`task-details-section ${taskState !== 'idle' ? 'is-visible' : ''}`}>
             {(taskState !== 'idle') && (
               <>
@@ -57,16 +53,13 @@ const StartTask = () => {
 
                 <form className="confirmation-form" onSubmit={handlers.handleSubmit}>
                   
-                  {/* --- UPDATED LABELS --- */}
                   <div className="labels-box">
                     <ul>
                       <li>OPERATION NAME:</li>
                       <li>SERIAL NUMBER OF DEVICE USED:</li>
-                      <li>ISSUE / DELAY:</li> {/* Added for checkboxes */}
+                      <li>ISSUE / DELAY:</li>
                     </ul>
                   </div>
-
-                  {/* --- UPDATED INPUTS --- */}
                   <div className="inputs-box">
                     <div className="form-row">
                       <select
@@ -91,8 +84,6 @@ const StartTask = () => {
                         <option value="SN-1001">SN-1001</option>
                       </select>
                     </div>
-
-                    {/* --- Checkboxes moved to their own row --- */}
                     <div className="form-row check-boxes">
                       <label>
                         <input
@@ -111,8 +102,6 @@ const StartTask = () => {
                         Delay
                       </label>
                     </div>
-
-                    {/* --- Num Devices and Hours Spent are now in one row --- */}
                     <div className="form-row small-inputs">
                       <div className="small-field">
                         <input
@@ -139,8 +128,6 @@ const StartTask = () => {
                         />
                       </div>
                     </div>
-
-                    {/* --- Textarea is now its own row --- */}
                     <div className="form-row">
                       <textarea
                         id="note"

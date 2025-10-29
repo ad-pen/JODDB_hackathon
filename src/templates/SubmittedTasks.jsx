@@ -1,9 +1,5 @@
 import React from 'react';
 import '../static/styles_submittedTasks.scss';
-import Header from './header';
-/**
- * A single task card component.
- */
 const mockTasks = [
   {
     id: 1,
@@ -34,20 +30,13 @@ const mockTasks = [
     status: "Failed"
   }
 ];
-
-/**
- * A single, parameterized task card component.
- * It takes a 'task' object as a prop.
- */
 const TaskCard = ({ task }) => {
-  // Get the status in lowercase for the CSS class (e.g., "pending")
   const statusClass = task.status.toLowerCase(); 
 
   return (
     <div className="task-card" tabIndex="0">
       <div className="task-details">
         <ul>
-          {/* We now show Label: Value */}
           <li>
             <strong>OP NAME:</strong>
             <span>{task.opName}</span>
@@ -69,9 +58,6 @@ const TaskCard = ({ task }) => {
   );
 };
 
-/**
- * The main page component for "Submitted Tasks".
- */
 const SubmittedTasks = () => {
   return (
    <> 
@@ -80,7 +66,6 @@ const SubmittedTasks = () => {
       <hr className="title-divider" />
       
       <div className="tasks-grid">
-        {/* Map over the mock tasks and render a card for each */}
         {mockTasks.map(task => (
           <TaskCard key={task.id} task={task} />
         ))}

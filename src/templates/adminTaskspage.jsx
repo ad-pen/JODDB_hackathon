@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import '../static/styles_adminTaskpage.scss';
 
-// --- Mock Data ---
 // In a real app, this would come from your DB
 const mockTasks = [
   { id: 1, taskNum: 'TASK 1', performed: 'PERFORMED TASK', tech: 'TECHNICIAN NAME', status: 'STATUS' },
@@ -19,17 +18,9 @@ const mockTaskDetails = {
   actualOutput: 48,
   hoursSpent: '2.5',
 };
-// -------------------
-
-
-/**
- * The Popup Modal Component
- */
 const TaskPreviewModal = ({ task, onClose }) => {
   return (
-    // The dark background overlay
     <div className="modal-overlay" onClick={onClose}>
-      {/* The modal content itself (stops click from closing) */}
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <ul className="modal-details-list">
           <li>TECHNICIAN NAME: <span>{task.techName}</span></li>
@@ -48,34 +39,18 @@ const TaskPreviewModal = ({ task, onClose }) => {
     </div>
   );
 };
-
-
-/**
- * The Main Admin Page Component
- */
 const AdminTasksPage = () => {
-  // State to control when the task list appears
   const [showTasks, setShowTasks] = useState(false);
-  
-  // State for the modal
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // We use mock details here, but you would pass a real task ID
   const [selectedTask, setSelectedTask] = useState(null);
-
-  // Handler for the "ENTER" button
   const handleEnter = (e) => {
     e.preventDefault();
     setShowTasks(true);
   };
-
-  // Handler for clicking a task row
   const handleTaskClick = (task) => {
-    // In a real app, you'd fetch details based on task.id
     setSelectedTask(mockTaskDetails); 
     setIsModalOpen(true);
   };
-
-  // Handler for closing the modal
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedTask(null);
@@ -84,11 +59,8 @@ const AdminTasksPage = () => {
   return (
     <>
       <main className="admin-tasks-container">
-        
-        {/* --- Left Column: Filters --- */}
-        <section className="filter-section">
+      <section className="filter-section">
           <form className="filter-form" onSubmit={handleEnter}>
-            {/* Custom dropdown for Employee */}
             <div className="form-group">
               <label htmlFor="employee">SELECT EMPLOYEE</label>
               <div className="custom-select">
@@ -100,7 +72,6 @@ const AdminTasksPage = () => {
               </div>
             </div>
 
-            {/* Custom dropdown for Date */}
             <div className="form-group">
               <label htmlFor="date">SELECT DATE</label>
               <div className="custom-select">
@@ -118,7 +89,6 @@ const AdminTasksPage = () => {
           </form>
         </section>
 
-        {/* --- Right Column: Task List --- */}
         <section className="tasks-list-section">
           {showTasks && (
             <div className="tasks-list">
@@ -139,7 +109,6 @@ const AdminTasksPage = () => {
         </section>
       </main>
 
-      {/* Render the modal only if it's open */}
       {isModalOpen && (
         <TaskPreviewModal task={selectedTask} onClose={handleCloseModal} />
       )}
