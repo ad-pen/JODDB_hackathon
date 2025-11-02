@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import '../static/styles_adminTaskpage.scss';
 
-// --- Mock Data ---
 // In a real app, this would come from your DB
 const mockTasks = [
   { id: 1, taskNum: 'TASK 1', performed: 'PERFORMED TASK', tech: 'TECHNICIAN NAME', status: 'STATUS' },
@@ -19,17 +18,19 @@ const mockTaskDetails = {
   actualOutput: 48,
   hoursSpent: '2.5',
 };
-// -------------------
 
+// --- MODIFIED TaskPreviewModal ---
+const TaskPreviewModal = ({ task, onClose, onApprove }) => {
+  // Add state for the note
+  const [note, setNote] = useState('');
 
-/**
- * The Popup Modal Component
- */
-const TaskPreviewModal = ({ task, onClose }) => {
+  const handleApproveClick = () => {
+    // Pass the note up to the parent component
+    onApprove(note);
+  };
+
   return (
-    // The dark background overlay
     <div className="modal-overlay" onClick={onClose}>
-      {/* The modal content itself (stops click from closing) */}
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <ul className="modal-details-list">
           <li>TECHNICIAN NAME: <span>{task.techName}</span></li>
@@ -39,9 +40,24 @@ const TaskPreviewModal = ({ task, onClose }) => {
           <li>EXPECTED OUTPUT NUMBER: <span>{task.expectedOutput}</span></li>
           <li>ACTUAL OUTPUT: <span>{task.actualOutput}</span></li>
           <li>HOURS SPENT: <span>{task.hoursSpent}</span></li>
+          
+          {/* --- NEW NOTE SECTION --- */}
+          <li className="note-section">
+            <label htmlFor="adminNote">ADD A NOTE:</label>
+            <textarea
+              id="adminNote"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
+              placeholder="Add an optional note..."
+              rows={3}
+            />
+          </li>
+          {/* --- END NEW NOTE SECTION --- */}
         </ul>
         <div className="modal-actions">
-          <button className="modal-btn approve" onClick={onClose}>✔</button>
+          {/* Updated to call handleApproveClick */}
+          <button className="modal-btn approve" onClick={handleApproveClick}>✔</button>
+          {/* Kept as onClose */}
           <button className="modal-btn reject" onClick={onClose}>✖</button>
         </div>
       </div>
@@ -49,46 +65,40 @@ const TaskPreviewModal = ({ task, onClose }) => {
   );
 };
 
-
-/**
- * The Main Admin Page Component
- */
 const AdminTasksPage = () => {
-  // State to control when the task list appears
   const [showTasks, setShowTasks] = useState(false);
-  
-  // State for the modal
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // We use mock details here, but you would pass a real task ID
   const [selectedTask, setSelectedTask] = useState(null);
 
-  // Handler for the "ENTER" button
   const handleEnter = (e) => {
     e.preventDefault();
     setShowTasks(true);
   };
 
-  // Handler for clicking a task row
   const handleTaskClick = (task) => {
-    // In a real app, you'd fetch details based on task.id
     setSelectedTask(mockTaskDetails); 
     setIsModalOpen(true);
   };
 
-  // Handler for closing the modal
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedTask(null);
   };
 
+  // --- NEW: Handle Approve ---
+  // This function receives the note from the modal
+  const handleApprove = (note) => {
+    console.log('Task Approved!');
+    console.log('Submitted Note:', note);
+    // Now, close the modal
+    handleCloseModal();
+  };
+
   return (
     <>
       <main className="admin-tasks-container">
-        
-        {/* --- Left Column: Filters --- */}
-        <section className="filter-section">
+      <section className="filter-section">
           <form className="filter-form" onSubmit={handleEnter}>
-            {/* Custom dropdown for Employee */}
             <div className="form-group">
               <label htmlFor="employee">SELECT EMPLOYEE</label>
               <div className="custom-select">
@@ -100,7 +110,6 @@ const AdminTasksPage = () => {
               </div>
             </div>
 
-            {/* Custom dropdown for Date */}
             <div className="form-group">
               <label htmlFor="date">SELECT DATE</label>
               <div className="custom-select">
@@ -118,7 +127,6 @@ const AdminTasksPage = () => {
           </form>
         </section>
 
-        {/* --- Right Column: Task List --- */}
         <section className="tasks-list-section">
           {showTasks && (
             <div className="tasks-list">
@@ -139,9 +147,12 @@ const AdminTasksPage = () => {
         </section>
       </main>
 
-      {/* Render the modal only if it's open */}
       {isModalOpen && (
-        <TaskPreviewModal task={selectedTask} onClose={handleCloseModal} />
+        <TaskPreviewModal 
+          task={selectedTask} 
+          onClose={handleCloseModal} 
+          onApprove={handleApprove} // Pass the new handler
+        />
       )}
     </>
   );

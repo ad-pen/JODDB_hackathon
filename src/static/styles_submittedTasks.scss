@@ -20,13 +20,46 @@ $highlight-purple: #9b59b6;
   to { opacity: 1; transform: translateY(0); }
 }
 
+// --- NEW: Title Header ---
+.title-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; // Allows wrapping on small viewports if needed
+  gap: 1rem;
+  margin-bottom: 0.5rem; // Moved from title to header
+}
+
 .submitted-title {
   color: $primary-color;
   font-weight: bold;
   font-size: clamp(1.8rem, 5vw, 2.2rem); // Fluid font size
   letter-spacing: 1px;
-  margin-bottom: 0.5rem;
+  // margin-bottom: 0.5rem; // <-- Removed from here
 }
+
+// --- NEW: Filter Styles ---
+.date-filter-container {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+
+  select,
+  input[type="date"] {
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #c0bfbf;
+    background: #fff;
+    color: $dark-text;
+    font-family: inherit;
+    font-size: 0.9rem;
+  }
+  
+  select {
+    cursor: pointer;
+  }
+}
+// --- END NEW STYLES ---
 
 .title-divider {
   border: 0;
@@ -91,12 +124,27 @@ $highlight-purple: #9b59b6;
   color: $primary-color;
   margin-left: 0.5rem;
 }
+.status-completed {
+  color: #2ecc71; // Example color
+  margin-left: 0.5rem;
+}
+.status-failed {
+  color: #e74c3c; // Example color
+  margin-left: 0.5rem;
+}
+
 
 // --- NEW: Media Query for Tablets and Phones ---
 @media (max-width: 900px) {
   .tasks-grid {
     grid-template-columns: 1fr; // Stacks to 1 column
     gap: 1.5rem;
+  }
+
+  // --- UPDATED: Stack title and filter ---
+  .title-header {
+    flex-direction: column;
+    align-items: flex-start; // Align both to the left
   }
 }
 
@@ -111,5 +159,16 @@ $highlight-purple: #9b59b6;
   }
   .task-details li {
     font-size: 0.9rem;
+  }
+
+  // --- Make filter elements full width ---
+  .date-filter-container {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    
+    select, input[type="date"] {
+      width: 100%;
+    }
   }
 }
