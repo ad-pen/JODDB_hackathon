@@ -1,8 +1,3 @@
-Here’s the same **README**, fully ready for GitHub — with all emojis removed and formatted cleanly for Markdown.
-You can copy and paste it directly as your `README.md`.
-
----
-
 # JODBB Hackathon Project – Job Order Digitalization and Benchmarking System
 
 This project was developed for the JODBB Hackathon to solve inefficiencies in manual job order tracking and technician performance management.
